@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Survey;
+use App\University;
 
 class SurveyAdminController extends Controller
 {
@@ -77,6 +78,54 @@ class SurveyAdminController extends Controller
       }
 
       Session::flash('change_fail', 'End Date Not Changed. Please Try Again.');
+      return redirect()->back();
+    }
+
+
+    public function addUniversity(Request $request, $survey_id) {
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        return redirect()->back();
+      }
+
+      if(is_null($request->adduniversity)) {
+        Session::flash('university_error', 'Please enter a university name');
+        return redirect()->back();
+      }
+
+      $university = new University;
+      $university->name = $request->adduniversity;
+      $university->survey_id = $survey_id;
+      if($university->save()) {
+        return redirect()->back();
+      }
+
+      Session::flash('university_error', 'Error saving university name. Please try again.');
+      return redirect()->back();
+    }
+
+
+    public function deleteUniversity(Request $request, $survey_id) {
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        return redirect()->back();
+      }
+
+      if(is_null($request->university_id)) {
+        return redirect()->back();
+      }
+
+      $university = University::where('survey_id', $survey->id)
+        ->where('id', $request->university_id)->first();
+      if($university->delete()) {
+        return redirect()->back();
+      }
+
+      Session::flash('university_error', 'Error deleting university. Please try again.');
       return redirect()->back();
     }
 }

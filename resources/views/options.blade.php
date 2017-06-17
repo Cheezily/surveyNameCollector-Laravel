@@ -25,21 +25,54 @@
       <div class="panel-body">
         <p><i>Add the university affiliation first then add instructors to their appropriate university.</i></p>
         <div class="row">
-          <div class="addUniversity col-md-10">
+          <div class="addUniversity col-md-12">
             <form class='form-inline' method="post" action="adduniversity">
               {{ csrf_field() }}
-              <input type="text" placeholder="Add New University Affiliation Here..." class="form-control input-sm addUniversityInput">
+              <input type="text" placeholder="Add New University Affiliation Here..." name="adduniversity"
+                     class="form-control input-sm addUniversityInput">
               <input class='btn btn-sm btn-primary' type="submit" value="Add University">
+              @if(Session::has('university_error'))
+                <p style="color: red;">{{ Session::get('university_error') }}</p>
+              @endif
             </form>
           </div>
-          @foreach ($survey->universities as $university)
-            <div class="col-md-10 col-md-offset-1">
-              <h4>{{ $university->name }}</h4>
-              @foreach ($university->instructors as $instructor)
-                {{ $instructor->name }}
-              @endforeach
-            </div>
-          @endforeach
+          <br>
+          <div class="row">
+            @foreach ($survey->universities as $university)
+              <div class="col-md-10 col-md-offset-1 panel panel-default">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-md-11 universityTitle">
+                      {{ $university->name }}
+                    </div>
+                      @if(count($university->instructors) === 0)
+                        <form class="form-inline col-md-1" method="post" action="deleteuniversity">
+                          {{ csrf_field() }}
+                          <input type='hidden' name="university_id" value="{{ $university->id }}">
+                          <input class='btn btn-sm btn-danger' type="submit" value="Delete">
+                        </form>
+                      @endif
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <form class="form-inline">
+                      <input class='form-control input-sm newInstructorField' type="text" name="first_name" placeholder="First Name...">
+                      <input class='form-control input-sm newInstructorField' type="text" name="first_name" placeholder="Last Name...">
+                      <input class='form-control input-sm newInstructorField' type="text" name="first_name" placeholder="Email...">
+                      <input type="submit" class="btn btn-sm btn-primary" value="Add Instructor">
+                    </form>
+                  </div>
+                </div>
+                <div class="panel-body">
+                  @foreach ($university->instructors as $instructor)
+                    {{ $instructor->name }}
+                  @endforeach
+                </div>
+
+
+              </div>
+            @endforeach
+          </div>
         </div>
       </div>
     </div>
