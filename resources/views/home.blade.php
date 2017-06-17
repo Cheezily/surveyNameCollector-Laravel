@@ -18,7 +18,9 @@
             @endif
 
             <div class="panel panel-default">
-                <div class="panel-heading">Create New Survey Name Collector</div>
+                <div class="panel-heading">
+                    <h3>Create New Survey Name Collector</h3>
+                </div>
                 <div class="panel-body">
                     <div class="form-group">
                         <form method="post" action="/create">
@@ -51,6 +53,8 @@
                             <h4>{{ $survey->name }}</h4>
                         </div>
                         <div class="panel-body">
+                            <p><b>Name Collection URL:</b> {{url('/', [$survey->slug])}}</p>
+                            <hr>
                             @if(is_null($survey->start))
                                 <p><b>Open From:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</p>
                             @else
@@ -62,36 +66,34 @@
                             @else
                                 <p><b>Open Until:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->end)) }}</p>
                             @endif
-
                             <hr>
-
                             <div class="row">
                                 <div class="col-md-8">
                                     <p><b>Universities Participating:</b> {{ count($survey->universities) }}</p>
                                     <p><b>Instructors Participating:</b> {{ count($survey->instructors) }}</p>
                                 </div>
                             </div>
-
                             <hr>
-
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <h4><b>Names Collected:</b> {{ count($survey->participants) }}</h4>
                                 </div>
-                                <div class="col-md-4 text-right">
-                                    <form method="post" action="/admin/download">
-                                        <input type="hidden" name="survey_id" value="{{ $survey->id }}">
-                                        {{ csrf_field() }}
-                                        <input class="btn btn-success" value="Download List">
-                                    </form>
+                                <div class="col-md-6">
+                                    <div class="btn-toolbar">
+                                        <a class="btn btn-primary" href="{{ url('/', ['admin', $survey->id, 'options']) }}">
+                                            Set Options
+                                        </a>
+                                        <a class="btn btn-success" href="{{ url('/', ['admin', $survey->id, 'download']) }}">
+                                            Download Names
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 @endforeach
             @else
-
+                <h3>No Surveys </h3>
             @endif
         </div>
     </div>

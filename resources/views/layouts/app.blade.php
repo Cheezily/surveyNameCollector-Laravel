@@ -11,7 +11,10 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    <!-- Jquery -->
+    <script src="{{ asset('js/jquery-3.2.1.slim.min.js') }}" type="text/javascript"></script>
 </head>
 <body>
     <div id="app">
