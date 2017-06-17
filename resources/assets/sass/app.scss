@@ -8,6 +8,8 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
+$border-color: #2a978e;
+
 .logoutButton {
   margin-top: 6px;
 }
@@ -17,11 +19,13 @@
 }
 
 .addUniversityLabel {
+  box-sizing: border-box;
   margin-left: 4%;
 }
 
 .addUniversityInput {
-  min-width: 70%;
+  box-sizing: border-box;
+  min-width: 80%;
   margin-left: 1%;
 }
 
@@ -39,15 +43,65 @@
 }
 
 .instructorOptionList {
+  box-sizing: border-box;
   padding: 4px 5px 4px 15px;
-
 }
 
 
 .instructorOptionList:hover {
-  background: #eee;
+  background: #dcdcdc;
 }
 
 .newInstructorField {
-  min-width: 25%;
+  min-width: 26%;
+}
+
+.panel {
+  border: 3px solid $border-color;
+  border-radius: 0;
+}
+
+.section-head {
+  color: $border-color;
+  font-weight: bold;
+}
+
+.copyAddressOptions {
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.navbar {
+  border-bottom: 3px solid $border-color;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.hiddenLink {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  display: inline;
+}
+
+.copySuccess, .optionSuccess {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2;
+}
+
+.optionSuccess {
+  display: block;
+}
+
+.alert {
+  border-radius: 0;
+}
+
+.alert-success {
+  border: 3px solid darkgreen;
 }

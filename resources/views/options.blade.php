@@ -2,68 +2,103 @@
 
 @section('content')
 
-
     @if(Session::has('change_success'))
-      <div class="alert alert-success">{{ Session::get('change_success') }}</div>
+      <div class="col-md-6 col-md-offset-3 alert alert-success optionSuccess">
+        <div class="col-md-11">
+          {{ Session::get('change_success') }}
+        </div>
+        <div class="col-md-1 text-right closeOptionSuccess">
+          <span class="glyphicon glyphicon-remove"></span>
+        </div>
+      </div>
     @endif
     @if(Session::has('change_fail'))
-      <div class="alert alert-danger">{{ Session::get('change_fail') }}</div>
+      <div class="col-md-10 col-md-offset-1 alert alert-danger">{{ Session::get('change_fail') }}</div>
     @endif
 
-    <div class="row">
+
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4><b>Survey Name: </b>{{ $survey->name }}</h4>
-            <p><b>Name Collection URL:</b> {{url('/', [$survey->slug])}}</p>
-            <p><b>Created:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</p>
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <h4 class="section-head"><b>Survey Name: </b>{{ $survey->name }}</h4>
+              </div>
+              <div class="col-md-6 col-sm-12 text-right">
+                <h4 class="section-head"><b>URL:</b>
+                <a href="{{url('/', ['survey', $survey->slug])}}">
+                  {{url('/', ['survey', $survey->slug])}}</a>
+                  <span class="glyphicon glyphicon-copy copyAddressOptions"></span>
+                </h4>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+    <textarea style="display: block;" class="hiddenLink">{{url('/', ['survey', $survey->slug])}}</textarea>
 
     <div class="row">
 
       <div class="col-md-3 col-md-offset-1">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4>Start & End Dates For Name Collection</h4>
-          </div>
-          <div class="panel-body">
-            @if(is_null($survey->start))
-              <h4><b>Open From:</b> <span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</span></h4>
-            @else
-              <h4><b>Open From:</b> <span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->start)) }}</span></h4>
-            @endif
-            <form class="form-inline" method="post" action="{{ url('/', ['admin', $survey->id, 'changestart']) }}">
-              <label for="newstart">New Start Time & Date</label>
-              <input class='form-control input-sm' type="datetime-local" name="newstart">
-              {{ csrf_field() }}
-              <input type='submit' class="btn btn-sm btn-primary" value="Change Start Date">
-              <p><i> If clicked while the date & time are blank, it will move the start back to the creation date.</i></p>
-            </form>
-            <hr>
+        <div class="row">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="section-head">Start & End Dates For Name Collection</h4>
+            </div>
+            <div class="panel-body">
+              @if(is_null($survey->start))
+                <h4><b>Opens:</b> <span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</span></h4>
+              @else
+                <h4><b>Opens:</b> <span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->start)) }}</span></h4>
+              @endif
+              <form class="form-inline" method="post" action="{{ url('/', ['admin', $survey->id, 'changestart']) }}">
+                <label for="newstart">New Start Date & Time</label><br>
+                <input class='form-control input-sm' type="datetime-local" name="newstart">
+                {{ csrf_field() }}
+                <input type='submit' class="btn btn-sm btn-primary" value="Change Start">
+                <p><i> If clicked while the date & time are blank, it will move the start back to the creation date.</i></p>
+              </form>
+              <hr>
 
-            @if(is_null($survey->end))
-              <h4><b>Open Until: </b><span class="optionInfo">No Closing Date Set</span></h4>
-            @else
-              <h4><b>Open Until: </b><span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->end)) }}</span></h4>
-            @endif
-            <form class="form-inline" method="post" action="{{ url('/', ['admin', $survey->id, 'changeend']) }}">
-              <label for="newstart">New End Time & Date</label>
-              <input class='form-control input-sm' type="datetime-local" name="newend">
-              {{ csrf_field() }}
-              <input type='submit' class="btn btn-sm btn-primary" value="Change End Date">
-              <p><i> If clicked while the date & time are blank, it will remove the end date.</i></p>
-            </form>
+              @if(is_null($survey->end))
+                <h4><b>Closes: </b><span class="optionInfo">No Closing Date Set</span></h4>
+              @else
+                <h4><b>Closes: </b><span class="optionInfo"> {{ date('D - M j, Y g:i a T', strtotime($survey->end)) }}</span></h4>
+              @endif
+              <form class="form-inline" method="post" action="{{ url('/', ['admin', $survey->id, 'changeend']) }}">
+                <label for="newstart">New End Date & Time</label><br>
+                <input class='form-control input-sm' type="datetime-local" name="newend">
+                {{ csrf_field() }}
+                <input type='submit' class="btn btn-sm btn-primary" value="Change End">
+                <p><i> If clicked while the date & time are blank, it will remove the end date.</i></p>
+              </form>
+            </div>
           </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="section-head">Special Instructions For Participants (Optional)</h4>
+            </div>
+            <div class="panel-body">
+              <p><i>These will be displayed to the survey participant when they land on the page.</i></p>
+              <form method="post" action="addinstructions">
+                <textarea name="instructions" rows="7" style="width: 100%;">{{ trim($survey->instructions) }}</textarea>
+                {{ csrf_field() }}
+                <input class='btn btn-sm btn-primary' type="submit" value="Submit">
+              </form>
+            </div>
+          </div>
+
         </div>
       </div>
+
+
 
     <div class="col-md-7">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <h4>Other Instructors Offering Extra Credit</h4>
+          <h4 class="section-head">Other Instructors Offering Extra Credit</h4>
         </div>
         <div class="panel-body">
           <i class="addUniversityLabel">Add the instructor's university affiliation first then add names to their appropriate university.</i>
@@ -86,14 +121,14 @@
                 <div class="col-md-10 col-md-offset-1 panel panel-default">
                   <div class="panel-heading">
                     <div class="row">
-                      <div class="col-md-11 universityTitle">
+                      <div class="col-md-9 universityTitle">
                         {{ $university->name }}
                       </div>
                         @if(count($university->instructors) === 0)
                           <form class="form-inline col-md-1" method="post" action="deleteuniversity">
                             {{ csrf_field() }}
                             <input type='hidden' name="university_id" value="{{ $university->id }}">
-                            <input class='btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete">
+                            <input class='btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete University">
                           </form>
                         @endif
                     </div>
@@ -118,7 +153,7 @@
                   <div class="panel-body">
                     @foreach ($university->instructors as $instructor)
                       <div class="row instructorOptionList">
-                        <div class="col-md-10">
+                        <div class="col-md-9 col-sm-9">
                           <span class="label label-default instructorRespondentCount">Respondents: {{ count($instructor->participants) }}</span>
                           {{ $instructor->first_name }} {{ $instructor->last_name }} - {{ $instructor->email }}
                         </div>

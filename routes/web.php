@@ -28,5 +28,6 @@ Route::post('/admin/{survey}/adduniversity/', 'SurveyAdminController@addUniversi
 Route::post('/admin/{survey}/deleteuniversity/', 'SurveyAdminController@deleteUniversity')->name('deleteUniversity');
 Route::post('/admin/{survey}/addinstructor/', 'SurveyAdminController@addInstructor')->name('addInstructor');
 Route::post('/admin/{survey}/deleteinstructor/', 'SurveyAdminController@deleteInstructor')->name('deleteInstructor');
+Route::post('/admin/{survey}/addinstructions/', 'SurveyAdminController@addInstructions')->name('addInstructions');
 
 

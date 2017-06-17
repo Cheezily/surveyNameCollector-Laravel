@@ -178,4 +178,24 @@ class SurveyAdminController extends Controller
       $instructor->delete();
       return redirect()->back();
     }
+
+
+    public function addInstructions(Request $request, $survey_id)
+    {
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        return redirect()->back();
+      }
+
+      $survey->instructions = trim($request->instructions);
+      if($survey->save()) {
+        Session::flash('change_success', 'Instructions updated!');
+        return redirect()->back();
+      }
+
+      Session::flash('change_fail', 'Instructions not updated. Please try again.');
+      return redirect()->back();
+    }
 }

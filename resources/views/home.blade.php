@@ -19,7 +19,7 @@
 
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3>Create New Survey Name Collector</h3>
+                    <h3 class="section-head">Create New Survey Name Collector</h3>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
@@ -45,15 +45,21 @@
             </div>
         </div>
 
-        <div class="col-md-5 col-md-offset-1">
+        <div class="col-md-6">
             @if (count($surveys) > 0 )
                 @foreach($surveys as $survey)
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h4>{{ $survey->name }}</h4>
+                            <h4 class="section-head">{{ $survey->name }} - Created: {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</h4>
                         </div>
                         <div class="panel-body">
-                            <p><b>Name Collection URL:</b> {{url('/', [$survey->slug])}}</p>
+                            <p>
+                                <b>Name Collection URL:</b>
+                                <a href="{{url('/', ['survey', $survey->slug])}}">
+                                {{url('/', ['survey', $survey->slug])}}
+                                </a>
+                            </p>
+                            <p><i>(Include this link address at the end of your survey)</i></p>
                             <hr>
                             @if(is_null($survey->start))
                                 <p><b>Open From:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</p>
@@ -93,7 +99,7 @@
                     </div>
                 @endforeach
             @else
-                <h3>No Surveys </h3>
+                <h3 class="section-head">No Surveys To List. Create One!</h3>
             @endif
         </div>
     </div>

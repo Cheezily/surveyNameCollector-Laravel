@@ -77,6 +77,10 @@
             </div>
         </nav>
 
+        <div class="copySuccess alert alert-success col-md-3">
+            Address Copied to Clipboard!
+        </div>
+
         @yield('content')
     </div>
 
