@@ -22,5 +22,17 @@ $(document).ready(function() {
     }
   })
 
+  $('.copyAddressHome').click(function() {
+    var survey = $(this).attr('survey');
+    var item = document.querySelector('#hiddenLink-' + survey).select();
+    var success = document.execCommand('copy');
+    if(success) {
+      $('.copySuccess').fadeIn(300, function() {
+        setTimeout(function() {
+          $('.copySuccess').fadeOut(600);
+        }, 2000);
+      })
+    }
+  })
 
 });

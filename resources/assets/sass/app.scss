@@ -66,9 +66,14 @@ $border-color: #2a978e;
   font-weight: bold;
 }
 
-.copyAddressOptions {
+.copyAddressOptions, .copyAddressHome {
   display: inline-block;
   margin-left: 15px;
+}
+
+.copyAddressHome {
+  font-size: 18px;
+  color: $border-color;
 }
 
 .navbar {
@@ -83,7 +88,9 @@ $border-color: #2a978e;
   width: 0;
   height: 0;
   opacity: 0;
-  display: inline;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
 }
 
 .copySuccess, .optionSuccess {

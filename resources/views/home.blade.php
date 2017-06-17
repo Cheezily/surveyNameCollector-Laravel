@@ -50,7 +50,8 @@
                 @foreach($surveys as $survey)
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h4 class="section-head">{{ $survey->name }} - Created: {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</h4>
+                            <h4 class="section-head">{{ $survey->name }} -
+                                Created: {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</h4>
                         </div>
                         <div class="panel-body">
                             <p>
@@ -58,8 +59,15 @@
                                 <a href="{{url('/', ['survey', $survey->slug])}}">
                                 {{url('/', ['survey', $survey->slug])}}
                                 </a>
+                                <span class="glyphicon glyphicon-copy copyAddressHome" survey="{{ $survey->id }}"></span>
                             </p>
-                            <p><i>(Include this link address at the end of your survey)</i></p>
+                            <p>
+                                <i>(Include this link address at the end of your survey)
+                                    <textarea class="hiddenLink" id="hiddenLink-{{$survey->id}}">
+                                        {{url('/', ['survey', $survey->slug])}}
+                                    </textarea>
+                                </i>
+                            </p>
                             <hr>
                             @if(is_null($survey->start))
                                 <p><b>Open From:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->created_at)) }}</p>
