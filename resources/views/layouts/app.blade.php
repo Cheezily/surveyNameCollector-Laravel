@@ -32,7 +32,11 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand" href="{{ url('/') }}">
-                        Survey Dashboard
+                        @if(empty($option_page))
+                            Survey Dashboard
+                        @else
+                            {{ $survey->name }}
+                        @endif
                     </a>
                 </div>
 
@@ -49,13 +53,19 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
+                        @if(!empty($option_page))
+                            <a href="{{ url('/', ['home']) }}">
+                                <button class="btn btn-default btn-primary logoutButton">
+                                    Back to Dashboard
+                                </button>
+                            </a>
+                        @endif
                         <a href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                                      document.getElementById('logout-form').submit();">
                             <button class="btn btn-default logoutButton">
                                 Logout
                             </button>
-
                         </a>
 
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -71,6 +81,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 </html>

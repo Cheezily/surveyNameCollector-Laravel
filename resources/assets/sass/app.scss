@@ -16,8 +16,13 @@
   color: #0b0;
 }
 
+.addUniversityLabel {
+  margin-left: 4%;
+}
+
 .addUniversityInput {
-  min-width: 90%;
+  min-width: 70%;
+  margin-left: 1%;
 }
 
 .addUniversity {
@@ -26,6 +31,21 @@
 
 .universityTitle {
   font-size: 18px;
+}
+
+.instructorRespondentCount {
+  display: inline-block;
+  font-size: 14px;
+}
+
+.instructorOptionList {
+  padding: 4px 5px 4px 15px;
+
+}
+
+
+.instructorOptionList:hover {
+  background: #eee;
 }
 
 .newInstructorField {

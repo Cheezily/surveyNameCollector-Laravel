@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Survey;
 use App\University;
+use App\Instructor;
 
 class SurveyAdminController extends Controller
 {
@@ -28,6 +29,7 @@ class SurveyAdminController extends Controller
 
       return view('options', [
          'survey' => $survey,
+          'option_page' => true,
       ]);
     }
 
@@ -82,7 +84,8 @@ class SurveyAdminController extends Controller
     }
 
 
-    public function addUniversity(Request $request, $survey_id) {
+    public function addUniversity(Request $request, $survey_id)
+    {
       $survey = Survey::where('id', $survey_id)
           ->where('user_id', Auth::user()->id)->first();
 
@@ -107,7 +110,8 @@ class SurveyAdminController extends Controller
     }
 
 
-    public function deleteUniversity(Request $request, $survey_id) {
+    public function deleteUniversity(Request $request, $survey_id)
+    {
       $survey = Survey::where('id', $survey_id)
           ->where('user_id', Auth::user()->id)->first();
 
@@ -126,6 +130,52 @@ class SurveyAdminController extends Controller
       }
 
       Session::flash('university_error', 'Error deleting university. Please try again.');
+      return redirect()->back();
+    }
+
+
+    public function addInstructor(Request $request, $survey_id)
+    {
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        return redirect()->back();
+      }
+
+      if(is_null($request->first_name) || is_null($request->last_name) || is_null($request->email)) {
+        Session::flash('instructorError'.$request->university_id, 'First Name, Last Name, and Email are Required. Please try again.');
+        return redirect()->back();
+      }
+
+      $instructor = new Instructor;
+      $instructor->first_name = ucwords($request->first_name);
+      $instructor->last_name = ucwords($request->last_name);
+      $instructor->email = $request->email;
+      $instructor->university_id = $request->university_id;
+      $instructor->survey_id = $survey_id;
+      $instructor->save();
+      return redirect()->back();
+    }
+
+
+    public function deleteInstructor(Request $request, $survey_id)
+    {
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        return redirect()->back();
+      }
+
+      $instructor = Instructor::where('id', $request->instructor_id)
+          ->where('survey_id', $survey->id)->first();
+
+      if(is_null($instructor)) {
+        return redirect()->back();
+      }
+
+      $instructor->delete();
       return redirect()->back();
     }
 }

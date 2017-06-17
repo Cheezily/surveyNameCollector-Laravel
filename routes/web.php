@@ -26,5 +26,7 @@ Route::post('/admin/{survey}/changestart/', 'SurveyAdminController@changeStart')
 Route::post('/admin/{survey}/changeend/', 'SurveyAdminController@changeEnd')->name('changeEnd');
 Route::post('/admin/{survey}/adduniversity/', 'SurveyAdminController@addUniversity')->name('addUniversity');
 Route::post('/admin/{survey}/deleteuniversity/', 'SurveyAdminController@deleteUniversity')->name('deleteUniversity');
+Route::post('/admin/{survey}/addinstructor/', 'SurveyAdminController@addInstructor')->name('addInstructor');
+Route::post('/admin/{survey}/deleteinstructor/', 'SurveyAdminController@deleteInstructor')->name('deleteInstructor');
 
 
