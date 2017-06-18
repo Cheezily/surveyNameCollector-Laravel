@@ -100,7 +100,7 @@
           <div class="panel-body">
             <i class="addUniversityLabel">Add the instructor's university affiliation first then add names to their appropriate university.</i>
             <div class="panel-heading">
-              <div class="addUniversity col-md-12">
+              <div class="addUniversity col-md-12 text-right">
                 <form class='form-inline' method="post" action="adduniversity">
                   {{ csrf_field() }}
                   <input type="text" placeholder="Add New University Affiliation Here..." name="adduniversity"
