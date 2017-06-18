@@ -24,16 +24,16 @@
       <p>Please select the instructor offering extra credit for your participation.</p>
     </div>
     <div class="panel-body">
-      <form id='mainForm' class="form-group mainForm" method="post" action="savename"
-        @if(Session::has('maunalError'))
+      <form id='mainForm' class="form-group mainForm" method="post" action="{{ url('/', ['survey', $survey->slug, 'savename']) }}"
+        @if(Session::has('maunalPage'))
           style="display: none;"
         @else
           style="display: block;"
         @endif
       >
         <label for="instructor">Your Instructor's Name</label>
-        <select id="instructor" class="instructorList form-control input-sm">
-          <option disabled="true" selected=""true>Select Your University Affiliation</option>
+        <select id="instructor" class="instructorList form-control input-sm" name="instructor">
+          <option disabled="true" selected="true">Select Your University Affiliation</option>
           <option DISABLED="true">─────────────────────────</option>
           @foreach($survey->universities as $university)
             <?php
@@ -74,19 +74,21 @@
 
       <br>
 
-      <form id='altForm' class="altForm form-group" method="post" action="savealtname"
-        @if(Session::has('maunalError'))
+      <form id='altForm' class="altForm form-group" method="post" action="{{ url('/', ['survey', $survey->slug, 'savealtname']) }}"
+        @if(Session::has('maunalPage'))
           style="display: block;"
         @else
             style="display: none;"
         @endif
       >
         <p>Since your instructor was not listed, please select your university from the list and enter the
-          instructor's name. If your university is not listed, select NOT LISTED and enter the university
+          instructor's name. If your university is not listed, select UNIVERSITY NOT LISTED and enter the university
           name manually.
         </p>
         <label for="universityList">Your University Affiliation</label>
-        <select id="universityList" class="instructorList form-control input-sm">
+        <select id="universityList" class="instructorList form-control input-sm" name="university">
+          <option disabled="true" selected="true">Select Your University Affiliation</option>
+          <option DISABLED="true">─────────────────────────</option>
           @foreach($survey->universities as $university)
             <option value="{{ $university->id }}">{{ $university->name }}</option>
           @endforeach
@@ -97,16 +99,16 @@
           <hr>
           <label for="manualUniversity">Enter Your University Name</label>
           <input class='form-control input-sm' type="text" id='manualUniversity' name="manualUniversity">
-          @if(!empty(Session::has('manualUniversityError')))
-            <p style="color: red;">{{ Session::get('manualUniversityError') }}</p>
-          @endif
         </div>
+        @if(!empty(Session::has('manualUniversityError')))
+          <p style="color: red;">{{ Session::get('manualUniversityError') }}</p>
+        @endif
           <hr>
           <h3>Instructor Information</h3>
           <label for="instructorfirst">Instructor First Name</label>
           <input class='form-control input-sm' type="text" id='instructorfirst' name="instructorfirst">
           <label for="instructorlast">Instructor Last Name</label>
-          <input class='form-control input-sm' type="text" id='instructorlast' name="instructorlast" required>
+          <input class='form-control input-sm' type="text" id='instructorlast' name="instructorlast" >
           @if(Session::has('manualInstructorError'))
             <p style="color: red;">{{ Session::get('manualInstructorError') }}</p>
           @endif
@@ -117,11 +119,11 @@
           <hr>
         <h3>Your Information</h3>
         <label for="studentfirst">Your First Name</label>
-        <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst" required>
+        <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst" >
         <label for="studentlast">Your Last Name</label>
-        <input class='form-control input-sm' type="text" id='studentlast' name="studentlast" required>
+        <input class='form-control input-sm' type="text" id='studentlast' name="studentlast" >
         <label for="studentclass">Class You're Getting Extra Credit In</label>
-        <input class='form-control input-sm' type="text" id='studentclass' name="studentclass" required>
+        <input class='form-control input-sm' type="text" id='studentclass' name="studentclass" >
         @if(!empty(Session::has('manualStudentError')))
           <p style="color: red;">{{ Session::get('manualStudentError') }}</p>
         @endif

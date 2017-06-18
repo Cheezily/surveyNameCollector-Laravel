@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index');
 
 Route::get('/survey/{slug}', 'NameController@showList');
+Route::post('/survey/{slug}/savename', 'NameController@saveName');
+Route::post('/survey/{slug}/savealtname', 'NameController@saveAltName');
 
 Route::post('/create', 'HomeController@create');
 
