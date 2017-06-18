@@ -17,9 +17,26 @@ class NameController extends Controller
 
     $survey = Survey::where('slug', $slug)->first();
 
+    $surveyStart = date(strtotime($survey->start));
+    $surveyEnd = date(strtotime($survey->end));
+    $now = date(strtotime('now'));
+
+    if($surveyEnd < $now && !is_null($survey->end)) {
+      $tooLate = true;
+      $tooEarly = false;
+    } elseif ($surveyStart > $now && !is_null($survey->start)) {
+      $tooLate = false;
+      $tooEarly = true;
+    } else {
+      $tooLate = false;
+      $tooEarly = false;
+    }
+
     return view('showList', [
         'survey' => $survey,
         'participant' => true,
+        'tooEarly' => $tooEarly,
+        'tooLate' => $tooLate,
     ]);
   }
 
