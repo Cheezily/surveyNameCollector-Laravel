@@ -37,8 +37,9 @@ $(document).ready(function() {
 
   $('.deleteInstructorButton').click(function(e) {
     e.preventDefault();
-    $('.confirmationWrapper').fadeIn(400);
-    $('.deleteInstructorDialog').fadeIn(400);
+    $('.confirmationWrapper').fadeIn(400, function() {
+      $('.deleteInstructorDialog').fadeIn(400);
+    });
     var instructor = $(this).attr('instructor');
     $('#deleteInstructorId').val(instructor);
     window.scrollTo(0, 0);
@@ -46,8 +47,9 @@ $(document).ready(function() {
 
   $('.deleteUniversityButton').click(function(e) {
     e.preventDefault();
-    $('.confirmationWrapper').fadeIn(400);
-    $('.deleteUniversityDialog').fadeIn(400);
+    $('.confirmationWrapper').fadeIn(400, function() {
+      $('.deleteUniversityDialog').fadeIn(400);
+    });
     var university = $(this).attr('university');
     $('#deleteUniversityId').val(university);
     window.scrollTo(0, 0);

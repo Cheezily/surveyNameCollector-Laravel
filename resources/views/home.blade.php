@@ -89,18 +89,16 @@
                             </div>
                             <hr>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-10">
                                     <h4><b>Names Collected:</b> {{ count($survey->participants) }}</h4>
                                 </div>
-                                <div class="col-md-6 text-right">
-                                    <div class="btn-toolbar">
-                                        <a class="btn btn-primary" href="{{ url('/', ['admin', $survey->id, 'options']) }}">
-                                            Set Options
-                                        </a>
-                                        <a class="btn btn-success" href="{{ url('/', ['admin', $survey->id, 'download']) }}">
-                                            Download Names
-                                        </a>
-                                    </div>
+                                <div class="col-md-6">
+                                    <a class="btn btn-primary" href="{{ url('/', ['admin', $survey->id, 'options']) }}">
+                                        Set Options
+                                    </a>
+                                    <a class="btn btn-success" href="{{ url('/', ['admin', $survey->id, 'download']) }}">
+                                        Download Names
+                                    </a>
                                 </div>
                             </div>
                         </div>
