@@ -80,7 +80,7 @@
                             @else
                                 <p><b>Open Until:</b> {{ date('D - M j, Y g:i a T', strtotime($survey->end)) }}</p>
                             @endif
-                            <hr>
+
                             <div class="row">
                                 <div class="col-md-8">
                                     <p><b>Universities Participating:</b> {{ count($survey->universities) }}</p>

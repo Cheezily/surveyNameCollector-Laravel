@@ -17,17 +17,19 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index');
 
-Route::post('/create', 'HomeController@create')->name('create');
+Route::get('/survey/{slug}', 'NameController@showList');
 
-Route::get('/admin/{survey}/options/', 'SurveyAdminController@showOptions')->name('showOptions');
-Route::post('/admin/{survey}/changestart/', 'SurveyAdminController@changeStart')->name('changeStart');
-Route::post('/admin/{survey}/changeend/', 'SurveyAdminController@changeEnd')->name('changeEnd');
-Route::post('/admin/{survey}/adduniversity/', 'SurveyAdminController@addUniversity')->name('addUniversity');
-Route::post('/admin/{survey}/deleteuniversity/', 'SurveyAdminController@deleteUniversity')->name('deleteUniversity');
-Route::post('/admin/{survey}/addinstructor/', 'SurveyAdminController@addInstructor')->name('addInstructor');
-Route::post('/admin/{survey}/deleteinstructor/', 'SurveyAdminController@deleteInstructor')->name('deleteInstructor');
-Route::post('/admin/{survey}/addinstructions/', 'SurveyAdminController@addInstructions')->name('addInstructions');
+Route::post('/create', 'HomeController@create');
+
+Route::get('/admin/{survey}/options/', 'SurveyAdminController@showOptions');
+Route::post('/admin/{survey}/changestart/', 'SurveyAdminController@changeStart');
+Route::post('/admin/{survey}/changeend/', 'SurveyAdminController@changeEnd');
+Route::post('/admin/{survey}/adduniversity/', 'SurveyAdminController@addUniversity');
+Route::post('/admin/{survey}/deleteuniversity/', 'SurveyAdminController@deleteUniversity');
+Route::post('/admin/{survey}/addinstructor/', 'SurveyAdminController@addInstructor');
+Route::post('/admin/{survey}/deleteinstructor/', 'SurveyAdminController@deleteInstructor');
+Route::post('/admin/{survey}/addinstructions/', 'SurveyAdminController@addInstructions');
 
 

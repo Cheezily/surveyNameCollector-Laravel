@@ -77,4 +77,7 @@ class HomeController extends Controller
         Session::flash('createfail', "There was an error creating the Survey Name Collector. Please try again.");
         return redirect()->back();
     }
+
+
+
 }

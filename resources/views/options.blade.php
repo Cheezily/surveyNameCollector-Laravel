@@ -22,7 +22,7 @@
           <div class="panel-heading">
             <div class="row">
               <div class="col-md-6 col-sm-12">
-                <h4 class="section-head"><b>Survey Name: </b>{{ $survey->name }}</h4>
+                <h4><b class="section-head">Survey Name: </b>{{ $survey->name }}</h4>
               </div>
               <div class="col-md-6 col-sm-12 text-right">
                 <h4 class="section-head"><b>URL:</b>
