@@ -95,88 +95,124 @@
 
 
 
-    <div class="col-md-7">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="section-head">Other Instructors Offering Extra Credit</h4>
-        </div>
-        <div class="panel-body">
-          <i class="addUniversityLabel">Add the instructor's university affiliation first then add names to their appropriate university.</i>
+      <div class="col-md-7">
+        <div class="panel panel-default">
           <div class="panel-heading">
-            <div class="addUniversity col-md-12">
-              <form class='form-inline' method="post" action="adduniversity">
-                {{ csrf_field() }}
-                <input type="text" placeholder="Add New University Affiliation Here..." name="adduniversity"
-                       class="form-control input-sm addUniversityInput">
-                <input class='btn btn-sm btn-primary' type="submit" value="Add University">
-                <hr>
-                @if(Session::has('university_error'))
-                  <p style="color: red;">{{ Session::get('university_error') }}</p>
-                @endif
-              </form>
-            </div>
-            <br>
-            <div class="row">
-              @foreach ($survey->universities as $university)
-                <div class="col-md-10 col-md-offset-1 panel panel-default">
-                  <div class="panel-heading">
-                    <div class="row">
-                      <div class="col-md-9 universityTitle">
-                        {{ $university->name }}
-                      </div>
-                        @if(count($university->instructors) === 0)
-                          <form class="form-inline col-md-1" method="post" action="deleteuniversity">
-                            {{ csrf_field() }}
-                            <input type='hidden' name="university_id" value="{{ $university->id }}">
-                            <input class='btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete University">
-                          </form>
-                        @endif
-                    </div>
-                  </div>
+            <h4 class="section-head">Other Instructors Offering Extra Credit</h4>
+          </div>
+          <div class="panel-body">
+            <i class="addUniversityLabel">Add the instructor's university affiliation first then add names to their appropriate university.</i>
+            <div class="panel-heading">
+              <div class="addUniversity col-md-12">
+                <form class='form-inline' method="post" action="adduniversity">
+                  {{ csrf_field() }}
+                  <input type="text" placeholder="Add New University Affiliation Here..." name="adduniversity"
+                         class="form-control input-sm addUniversityInput">
+                  <input class='btn btn-sm btn-primary' type="submit" value="Add University">
+                  <hr>
+                  @if(Session::has('university_error'))
+                    <p style="color: red;">{{ Session::get('university_error') }}</p>
+                  @endif
+                </form>
+              </div>
+              <br>
+              <div class="row">
+                @foreach ($survey->universities as $university)
+                  <div class="col-md-10 col-md-offset-1 panel panel-default">
                     <div class="panel-heading">
-                      <form class="form-inline" method="post" action="addinstructor">
-                        <input class='form-control input-sm newInstructorField' type="text"
-                               name="first_name" placeholder="First Name..." >
-                        <input class='form-control input-sm newInstructorField' type="text"
-                               name="last_name" placeholder="Last Name..." >
-                        <input class='form-control input-sm newInstructorField' type="email"
-                               name="email" placeholder="Email (optional)...">
-                        <input type="hidden" name="university_id" value="{{ $university->id }}">
-                        {{ csrf_field() }}
-                        <input type="submit" class="btn btn-sm btn-primary" value="Add Instructor">
-                        @if(Session::has('instructorError'.$university->id))
-                          <p style="color: red;">{{ Session::get('instructorError'.$university->id) }}</p>
-                        @endif
-                      </form>
-                    </div>
-
-                  <div class="panel-body">
-                    @foreach ($university->instructors as $instructor)
-                      <div class="row instructorOptionList">
-                        <div class="col-md-9 col-sm-9">
-                          <span class="label label-default instructorRespondentCount">Respondents: {{ count($instructor->participants) }}</span>
-                          {{ $instructor->first_name }} {{ $instructor->last_name }} - {{ $instructor->email }}
+                      <div class="row">
+                        <div class="col-md-9 universityTitle">
+                          {{ $university->name }}
+                          @if($university->student_added)
+                            <span class="label label-info instructorRespondentCount">Added By Student</span>
+                          @endif
                         </div>
-                        @if(count($instructor->participants) === 0)
-                          <form class="form-inline col-md-2" method="post" action="deleteinstructor">
-                            {{ csrf_field() }}
-                            <input type='hidden' name="instructor_id" value="{{ $instructor->id }}">
-                            <input class='btn btn-xs btn-danger' type="submit" value="Delete Instructor">
-                          </form>
-                        @endif
+                        <div class="col-md-3 text-right">
+                          <button class="btn btn-xs btn-danger deleteUniversityButton"
+                            university="{{ $university->id }}">Delete University</button>
+                        </div>
                       </div>
-                    @endforeach
+                    </div>
+                      <div class="panel-heading">
+                        <form class="form-inline" method="post" action="addinstructor">
+                          <input class='form-control input-sm newInstructorField' type="text"
+                                 name="first_name" placeholder="First Name..." >
+                          <input class='form-control input-sm newInstructorField' type="text"
+                                 name="last_name" placeholder="Last Name..." >
+                          <input class='form-control input-sm newInstructorField' type="email"
+                                 name="email" placeholder="Email (optional)...">
+                          <input type="hidden" name="university_id" value="{{ $university->id }}">
+                          {{ csrf_field() }}
+                          <input type="submit" class="btn btn-sm btn-primary" value="Add Instructor">
+                          @if(Session::has('instructorError'.$university->id))
+                            <p style="color: red;">{{ Session::get('instructorError'.$university->id) }}</p>
+                          @endif
+                        </form>
+                      </div>
+
+                    <div class="panel-body">
+                      @foreach ($university->instructors as $instructor)
+                        <div class="row instructorOptionList">
+                          <div class="col-md-9 col-sm-9">
+                            <span class="label label-default instructorRespondentCount">Respondents: {{ count($instructor->participants) }}</span>
+                            @if($instructor->student_added)
+                              <span class="label label-info instructorRespondentCount">Added By Student</span>
+                            @endif
+                            {{ $instructor->first_name }} {{ $instructor->last_name }}
+                            @if ($instructor->email) {
+                              - {{ $instructor->email }}
+                            @endif
+                          </div>
+                          <div class="col-md-3 text-right">
+                            <button class="btn btn-xs btn-danger deleteInstructorButton"
+                                    instructor="{{ $instructor->id }}">Delete Instructor</button>
+                          </div>
+                        </div>
+                      @endforeach
+                    </div>
                   </div>
-                </div>
-              @endforeach
+                @endforeach
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="confirmationWrapper">
+      <div class="panel panel-default col-md-4 col-md-offset-4 deleteUniversityDialog">
+        <div class="panel-heading">
+          <h4 class="section-head">Confirm University Deletion</h4>
+        </div>
+        <div class="panel-body">
+          <h5>Please confirm that you want to delete this university. This will delete any instructors and
+            student names attached to it.  This cannot be undone.</h5>
+          <button class="col-md-3 btn btn-sm btn-primary cancelDeleteUniversity">Cancel</button>
+          <form class="form-inline" method="post" action="deleteuniversity">
+            {{ csrf_field() }}
+            <input type='hidden' name="university_id" id="deleteUniversityId">
+            <input class='col-md-3 col-md-offset-6 btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete University">
+          </form>
+        </div>
+      </div>
 
+      <div class="panel panel-default col-md-4 col-md-offset-4 deleteInstructorDialog">
+        <div class="panel-heading">
+          <h4 class="section-head">Confirm Instructor Deletion</h4>
+        </div>
+        <div class="panel-body">
+          <h5>Please confirm that you want to delete this instructor. This will delete student names attached to it.
+            This cannot be undone.</h5>
+          <button class="col-md-3 btn btn-sm btn-primary cancelDeleteInstructor">Cancel</button>
+          <form class="form-inline" method="post" action="deleteinstructor">
+            {{ csrf_field() }}
+            <input type='hidden' name="instructor_id" id="deleteInstructorId">
+            <input class='col-md-3 col-md-offset-6 btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete Instructor">
+          </form>
+        </div>
+      </div>
     </div>
+
 
 
 @endsection

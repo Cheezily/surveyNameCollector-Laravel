@@ -35,4 +35,34 @@ $(document).ready(function() {
     }
   })
 
+  $('.deleteInstructorButton').click(function(e) {
+    e.preventDefault();
+    $('.confirmationWrapper').fadeIn(400);
+    $('.deleteInstructorDialog').fadeIn(400);
+    var instructor = $(this).attr('instructor');
+    $('#deleteInstructorId').val(instructor);
+    window.scrollTo(0, 0);
+  })
+
+  $('.deleteUniversityButton').click(function(e) {
+    e.preventDefault();
+    $('.confirmationWrapper').fadeIn(400);
+    $('.deleteUniversityDialog').fadeIn(400);
+    var university = $(this).attr('university');
+    $('#deleteUniversityId').val(university);
+    window.scrollTo(0, 0);
+  })
+
+  $('.cancelDeleteInstructor').click(function() {
+    $('.confirmationWrapper').fadeOut(400);
+    $('.deleteInstructorDialog').fadeOut(400);
+    $('#deleteInstructorId').val('');
+  })
+
+  $('.cancelDeleteUniversity').click(function() {
+    $('.confirmationWrapper').fadeOut(400);
+    $('.deleteUniversityDialog').fadeOut(400);
+    $('#deleteUniversityId').val('');
+  })
+
 });

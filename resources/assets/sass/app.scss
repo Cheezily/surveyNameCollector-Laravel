@@ -109,6 +109,25 @@ $border-color: #2a978e;
   display: none;
 }
 
+.confirmationWrapper {
+  display: none;
+  background: rgba(0,0,0,.93);
+  width: 100%;
+  height: 300%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.deleteUniversityDialog, .deleteInstructorDialog {
+  display: none;
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+}
+
 .alert {
   border-radius: 0;
 }

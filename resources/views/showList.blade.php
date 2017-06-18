@@ -36,15 +36,15 @@
           <option disabled="true" selected="true">Select Your University Affiliation</option>
           <option DISABLED="true">─────────────────────────</option>
           @foreach($survey->universities as $university)
-            <?php
+            <?php /*
               $validInstructors = false;
               foreach($university->instructors as $instructor) {
                 if($instructor->student_added == false) {
                   $validInstructors = true;
                 }
-              }
+              } */
             ?>
-            @if($validInstructors)
+            @if(count($university->instructors) > 0)
               <option disabled="true">{{ $university->name }}</option>
               @foreach($university->instructors as $instructor)
                 <option value="{{ $instructor->id }}">

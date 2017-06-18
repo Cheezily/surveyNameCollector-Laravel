@@ -125,6 +125,16 @@ class SurveyAdminController extends Controller
 
       $university = University::where('survey_id', $survey->id)
         ->where('id', $request->university_id)->first();
+
+      if($university) {
+        foreach($university->instructors as $instructor) {
+          foreach($instructor->participants as $participant) {
+            $participant->delete();
+          }
+          $instructor->delete();
+        }
+      }
+
       if($university->delete()) {
         return redirect()->back();
       }
@@ -175,8 +185,15 @@ class SurveyAdminController extends Controller
         return redirect()->back();
       }
 
-      $instructor->delete();
-      return redirect()->back();
+      if($instructor) {
+        foreach($instructor->participants as $participant) {
+          $participant->delete();
+        }
+      }
+
+      if($instructor->delete()) {
+        return redirect()->back();
+      }
     }
 
 

@@ -11,7 +11,7 @@
       <h4 class="section-head">Survey Extra Credit</h4>
     </div>
     <div class="panel-body">
-      <h4>Thanks!  Your participation has been recorded.  Your instructor will be notified soon.</h4>
+      <h4>{{ $output }}</h4>
     </div>
   </div>
 </body>

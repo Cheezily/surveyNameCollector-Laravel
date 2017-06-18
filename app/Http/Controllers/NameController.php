@@ -8,6 +8,7 @@ use App\Survey;
 use App\Participant;
 use App\University;
 use App\Instructor;
+use Illuminate\Validation\Rules\In;
 
 class NameController extends Controller
 {
@@ -55,6 +56,7 @@ class NameController extends Controller
       return view('thanks', [
           'survey' => $survey,
           'participant' => true,
+          'output' => 'Thanks!  Your participation has been recorded.  Your instructor will be notified soon.',
       ]);
     }
 
@@ -98,36 +100,71 @@ class NameController extends Controller
       return redirect()->back();
     }
 
+    //Save a new university or load it if it exists. These dupe
     if($request->university === 'notlisted') {
-      $university = new University;
-      $university->survey_id = $survey->id;
-      $university->name = ucwords($request->manualUniversity);
-      $university->save();
+      $universityDuplicateTest = University::where('survey_id', $survey->id)
+          ->where('name', ucwords($request->manualUniversity))->first();
+
+      if(is_null($universityDuplicateTest)) {
+        $university = new University;
+        $university->survey_id = $survey->id;
+        $university->name = ucwords($request->manualUniversity);
+        $university->student_added = true;
+        $university->save();
+      } else {
+        $university = $universityDuplicateTest;
+      }
+
     } else {
       $university = University::where('id', $request->university)->first();
     }
 
-    $instructor = new Instructor;
+    //figure out the first name before testing to see if it's a duplicate
     if(is_null($request->instructorfirst)) {
-      $instructor->first_name = '---';
+      $instructorFirstName = '---';
     } else {
-      $instructor->first_name = ucfirst($request->instructorfirst);
+      $instructorFirstName = ucfirst($request->instructorfirst);
     }
-    $instructor->last_name = ucfirst($request->instructorlast);
-    $instructor->survey_id = $survey->id;
-    $instructor->university_id = $university->id;
-    $instructor->student_added = true;
-    $instructor->save();
 
-    $participant = new Participant;
-    $participant->instructor_id = $instructor->id;
-    $participant->first_name = ucfirst($request->studentfirst);
-    $participant->last_name = ucfirst($request->studentlast);
-    $participant->class = ucfirst($request->studentclass);
-    if($participant->save()) {
+    $instructorDuplicateTest = Instructor::where('first_name', $instructorFirstName)
+        ->where('university_id', $university->id)
+        ->where('last_name', ucfirst($request->instructorlast))
+        ->where('survey_id', $survey->id)->first();
+
+    if(is_null($instructorDuplicateTest)) {
+      $instructor = new Instructor;
+      $instructor->first_name = $instructorFirstName;
+      $instructor->last_name = ucfirst($request->instructorlast);
+      $instructor->survey_id = $survey->id;
+      $instructor->university_id = $university->id;
+      $instructor->student_added = true;
+      $instructor->save();
+    } else {
+      $instructor = $instructorDuplicateTest;
+    }
+
+    $participantDuplicateTest = Participant::where('first_name', ucfirst($request->studentfirst))
+        ->where('last_name', ucfirst($request->studentlast))
+        ->where('instructor_id', $instructor->id)
+        ->where('class', ucfirst($request->studentclass))->first();
+
+    if(is_null($participantDuplicateTest)) {
+      $participant = new Participant;
+      $participant->instructor_id = $instructor->id;
+      $participant->first_name = ucfirst($request->studentfirst);
+      $participant->last_name = ucfirst($request->studentlast);
+      $participant->class = ucfirst($request->studentclass);
+
+      if($participant->save()) {
+        $output = 'Thanks!  Your participation has been recorded.  Your instructor will be notified soon.';
+      } else {
+        $output = 'Your name has already been recorded for this survey. Thank you for your participation.';
+      }
+
       return view('thanks', [
           'survey' => $survey,
           'participant' => true,
+          'output' => $output,
       ]);
     }
 
