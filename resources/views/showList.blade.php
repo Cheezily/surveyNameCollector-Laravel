@@ -33,6 +33,8 @@
       >
         <label for="instructor">Your Instructor's Name</label>
         <select id="instructor" class="instructorList form-control input-sm">
+          <option disabled="true" selected=""true>Select Your University Affiliation</option>
+          <option DISABLED="true">─────────────────────────</option>
           @foreach($survey->universities as $university)
             <?php
               $validInstructors = false;

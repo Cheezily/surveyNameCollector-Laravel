@@ -143,8 +143,8 @@ class SurveyAdminController extends Controller
         return redirect()->back();
       }
 
-      if(is_null($request->first_name) || is_null($request->last_name) || is_null($request->email)) {
-        Session::flash('instructorError'.$request->university_id, 'First Name, Last Name, and Email are Required. Please try again.');
+      if(is_null($request->first_name) || is_null($request->last_name)) {
+        Session::flash('instructorError'.$request->university_id, 'First and Last Name are Required. Please try again.');
         return redirect()->back();
       }
 
