@@ -89,11 +89,8 @@
               </form>
             </div>
           </div>
-
         </div>
       </div>
-
-
 
       <div class="col-md-7">
         <div class="panel panel-default">
@@ -118,7 +115,7 @@
               <br>
               <div class="row">
                 @foreach ($survey->universities as $university)
-                  <div class="col-md-10 col-md-offset-1 panel panel-default">
+                  <div class="col-md-11 col-md-offset-1 panel panel-default">
                     <div class="panel-heading">
                       <div class="row">
                         <div class="col-md-9 universityTitle">
@@ -133,15 +130,23 @@
                         </div>
                       </div>
                     </div>
-                      <div class="panel-heading">
+                      <div class="panel-heading text-right">
                         <form class="form-inline" method="post" action="addinstructor">
-                          <input class='form-control input-sm newInstructorField' type="text"
-                                 name="first_name" placeholder="First Name..." >
-                          <input class='form-control input-sm newInstructorField' type="text"
-                                 name="last_name" placeholder="Last Name..." >
-                          <input class='form-control input-sm newInstructorField' type="email"
-                                 name="email" placeholder="Email (optional)...">
+                          <div class="col-md-9">
+                            <div class="col-md-4 text-right">
+                              <input class='form-control input-sm newInstructorField' type="text"
+                                     name="first_name" placeholder="First Name..." >
+                            </div>
+                            <div class="col-md-4 text-center">
+                              <input class='form-control input-sm newInstructorField' type="text"
+                                     name="last_name" placeholder="Last Name..." >
+                            </div>
+                            <div class="col-md-4 text-left">
+                              <input class='form-control input-sm newInstructorField' type="email"
+                                     name="email" placeholder="Email (optional)...">
+                            </div>
                           <input type="hidden" name="university_id" value="{{ $university->id }}">
+                          </div>
                           {{ csrf_field() }}
                           <input type="submit" class="btn btn-sm btn-primary" value="Add Instructor">
                           @if(Session::has('instructorError'.$university->id))
@@ -179,20 +184,21 @@
       </div>
     </div>
 
-    <div class="confirmationWrapper">
-      <div class="panel panel-default col-md-4 col-md-offset-4 deleteUniversityDialog">
-        <div class="panel-heading">
-          <h4 class="section-head">Confirm University Deletion</h4>
-        </div>
-        <div class="panel-body">
-          <h5>Please confirm that you want to delete this university. This will delete any instructors and
-            student names attached to it.  This cannot be undone.</h5>
-          <button class="col-md-3 btn btn-sm btn-primary cancelDeleteUniversity">Cancel</button>
-          <form class="form-inline" method="post" action="deleteuniversity">
-            {{ csrf_field() }}
-            <input type='hidden' name="university_id" id="deleteUniversityId">
-            <input class='col-md-3 col-md-offset-6 btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete University">
-          </form>
+      <div class="confirmationWrapper">
+        <div class="panel panel-default col-md-4 col-md-offset-4 deleteUniversityDialog">
+          <div class="panel-heading">
+            <h4 class="section-head">Confirm University Deletion</h4>
+          </div>
+          <div class="panel-body">
+            <h5>Please confirm that you want to delete this university. This will delete any instructors and
+              student names attached to it.  This cannot be undone.</h5>
+            <button class="col-md-3 btn btn-sm btn-primary cancelDeleteUniversity">Cancel</button>
+            <form class="form-inline" method="post" action="deleteuniversity">
+              {{ csrf_field() }}
+              <input type='hidden' name="university_id" id="deleteUniversityId">
+              <input class='col-md-3 col-md-offset-6 btn btn-sm btn-danger deleteUniversity' type="submit" value="Delete University">
+            </form>
+          </div>
         </div>
       </div>
 
