@@ -26,6 +26,8 @@ Route::post('/survey/{slug}/savealtname', 'NameController@saveAltName');
 Route::post('/create', 'HomeController@create');
 
 Route::get('/admin/{survey}/options/', 'SurveyAdminController@showOptions');
+Route::get('/admin/{survey}/download/', 'SurveyAdminController@download');
+
 Route::post('/admin/{survey}/changestart/', 'SurveyAdminController@changeStart');
 Route::post('/admin/{survey}/changeend/', 'SurveyAdminController@changeEnd');
 Route::post('/admin/{survey}/adduniversity/', 'SurveyAdminController@addUniversity');

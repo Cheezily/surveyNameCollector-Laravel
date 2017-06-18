@@ -215,4 +215,51 @@ class SurveyAdminController extends Controller
       Session::flash('change_fail', 'Instructions not updated. Please try again.');
       return redirect()->back();
     }
+
+
+    public function download($survey_id) {
+
+      $survey = Survey::where('id', $survey_id)
+          ->where('user_id', Auth::user()->id)->first();
+
+      if(is_null($survey)) {
+        exit;
+      }
+
+      $out = "Student First Name, Student Last Name, University, ".
+          "Instructor First Name, Instructor Last Name, Class, Time \n";
+
+      $results = [];
+      $universities = University::where('survey_id', $survey->id)->get();
+      foreach($universities as $university) {
+        foreach($university->instructors as $instructor) {
+          foreach($instructor->participants as $participant) {
+            $results[] = [
+                'student_first' => $participant->first_name,
+                'student_last' => $participant->last_name,
+                'university' => $university->name,
+                'instructor_first' => $instructor->first_name,
+                'instructor_last' => $instructor->last_name,
+                'class' => $participant->class,
+                'submitted' => $participant->created_at,
+            ];
+          }
+        }
+      }
+
+      forEach($results as $line) {
+        $out .= $line['student_first'].',';
+        $out .= $line['student_last'].',';
+        $out .= $line['university'].',';
+        $out .= $line['instructor_first'].',';
+        $out .= $line['instructor_last'].',';
+        $out .= $line['class'].',';
+        $out .= date("M j Y g:i:s A", strtotime($line['submitted']))." CST \n";
+      }
+      header("Content-type: application/octet-stream");
+      header("Content-Disposition: attachment; filename=output.csv");
+      header("Pragma: no-cache");
+      header("Expires: 0");
+      print $out;
+    }
 }
