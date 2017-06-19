@@ -223,6 +223,16 @@ body, html {
   color: white;
 }
 
+.myname {
+  float: left;
+  margin-left: 10px;
+}
+
+.github {
+  float: right;
+  margin-right: 10px;
+}
+
 .homeButton:hover, .loginButton:hover, .registerButton:hover {
   color: $border-color;
   font-weight: bold;
