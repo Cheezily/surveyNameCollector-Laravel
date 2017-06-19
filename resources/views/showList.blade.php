@@ -87,11 +87,11 @@
             </select>
             <hr>
             <label for="studentfirst">Your First Name</label>
-            <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst">
+            <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst" required>
             <label for="studentfirst">Your Last Name</label>
-            <input class='form-control input-sm' type="text" id='studentfirst' name="studentlast">
+            <input class='form-control input-sm' type="text" id='studentfirst' name="studentlast" required>
             <label for="studentclass">Class You're Getting Extra Credit In</label>
-            <input class='form-control input-sm' type="text" id='studentclass' name="studentclass">
+            <input class='form-control input-sm' type="text" id='studentclass' name="studentclass" required>
             @if(!empty(Session::has('studentError')))
               <p style="color: red;">{{ Session::get('studentError') }}</p>
             @endif
@@ -137,7 +137,7 @@
               <label for="instructorfirst">Instructor First Name</label>
               <input class='form-control input-sm' type="text" id='instructorfirst' name="instructorfirst">
               <label for="instructorlast">Instructor Last Name</label>
-              <input class='form-control input-sm' type="text" id='instructorlast' name="instructorlast" >
+              <input class='form-control input-sm' type="text" id='instructorlast' name="instructorlast" required>
               @if(Session::has('manualInstructorError'))
                 <p style="color: red;">{{ Session::get('manualInstructorError') }}</p>
               @endif
@@ -148,11 +148,11 @@
               <hr>
             <h3>Your Information</h3>
             <label for="studentfirst">Your First Name</label>
-            <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst" >
+            <input class='form-control input-sm' type="text" id='studentfirst' name="studentfirst" required>
             <label for="studentlast">Your Last Name</label>
-            <input class='form-control input-sm' type="text" id='studentlast' name="studentlast" >
+            <input class='form-control input-sm' type="text" id='studentlast' name="studentlast" required>
             <label for="studentclass">Class You're Getting Extra Credit In</label>
-            <input class='form-control input-sm' type="text" id='studentclass' name="studentclass" >
+            <input class='form-control input-sm' type="text" id='studentclass' name="studentclass" required>
             @if(!empty(Session::has('manualStudentError')))
               <p style="color: red;">{{ Session::get('manualStudentError') }}</p>
             @endif
