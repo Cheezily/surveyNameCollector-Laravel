@@ -39,8 +39,8 @@
       <div class="footer">
         <p class="myname">
           &copy;<?php echo(date('Y', strtotime('now'))); ?>
-          <span id="name1"></span>
-          <span id="name2"></span>
+          <span id="name1">Philip Michaels</span>
+          <span id="name2">Dr. Kerri Milita</span>
         </p>
         <p class="github">
           <a href="https://github.com/Cheezily/surveyNameCollector-Laravel">
