@@ -227,7 +227,7 @@ class SurveyAdminController extends Controller
       }
 
       $out = "Student First Name, Student Last Name, University, ".
-          "Instructor First Name, Instructor Last Name, Class, Time \n";
+          "Instructor First Name, Instructor Last Name, Instructor Email, Class, Time \n";
 
       $results = [];
       $universities = University::where('survey_id', $survey->id)->get();
@@ -240,6 +240,7 @@ class SurveyAdminController extends Controller
                 'university' => $university->name,
                 'instructor_first' => $instructor->first_name,
                 'instructor_last' => $instructor->last_name,
+                'instructor_email' => $instructor->email,
                 'class' => $participant->class,
                 'submitted' => $participant->created_at,
             ];
@@ -253,6 +254,7 @@ class SurveyAdminController extends Controller
         $out .= $line['university'].',';
         $out .= $line['instructor_first'].',';
         $out .= $line['instructor_last'].',';
+        $out .= $line['instructor_email'].',';
         $out .= $line['class'].',';
         $out .= date("M j Y g:i:s A", strtotime($line['submitted']))." CST \n";
       }
