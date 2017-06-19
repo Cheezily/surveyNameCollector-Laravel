@@ -8,7 +8,7 @@
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 
-$border-color: #2a978e;
+$border-color: #2da69d;
 
 .logoutButton {
   margin-top: 6px;
@@ -128,14 +128,54 @@ $border-color: #2a978e;
   margin: 0 auto;
 }
 
-.alert {
-
-}
-
 .alert-success {
   border: 3px solid darkgreen;
 }
 
-.form-control, .label {
+
+//home page styling
+.homeButtonWrapper {
+  box-sizing: border-box;
+  text-align: center;
+  padding: 30px 30px;
+  width: 500px;
+  height: 200px;
+  border: 3px solid $border-color;
+}
+
+.homeButton, .loginButton, .registerButton {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: block;
+  height: 50px;
+  width: 300px;
+  padding: 3px 0;
+  margin: 5px 0;
+  font-style: italic;
+  text-transform: capitalize;
+  background: $border-color;
+  color: white;
+  font-size: 28px;
+  text-align: center;
+  font-weight: 100;
+  -webkit-clip-path: polygon(0 0%, 100% 20%, 100% 80%, 0 100%);
+  clip-path: polygon(0 0%, 100% 20%, 100% 80%, 0 100%);
+}
+
+.homeButton:hover, .loginButton:hover, .registerButton:hover {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  background: 2DA69D;
+}
+
+.loginButton {
+
+
+}
+
+.registerButton {
+
 }
 
