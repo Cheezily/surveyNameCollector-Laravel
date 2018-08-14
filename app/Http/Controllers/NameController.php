@@ -15,7 +15,10 @@ class NameController extends Controller
 
   public function showList($slug) {
 
-    $survey = Survey::where('slug', $slug)->first();
+    $survey = Survey::with(['universities', 'universities.instructors'])
+      ->where('slug', $slug)->first();
+
+    //dd($survey);
 
     $surveyStart = date(strtotime($survey->start));
     $surveyEnd = date(strtotime($survey->end));
@@ -37,13 +40,15 @@ class NameController extends Controller
         'participant' => true,
         'tooEarly' => $tooEarly,
         'tooLate' => $tooLate,
+        'survey_json' => $survey->toarray()
     ]);
   }
 
 
   public function saveName(Request $request, $slug) {
 
-    $survey = Survey::where('slug', $slug)->first();
+    $survey = Survey::with(['universities', 'universities.instructors'])
+      ->where('slug', $slug)->first();
 
     if(is_null($survey)) {
       return redirect()->back();
@@ -86,7 +91,8 @@ class NameController extends Controller
 
     Session::flash('maunalPage', true);
 
-    $survey = Survey::where('slug', $slug)->first();
+    $survey = Survey::with(['universities', 'universities.instructors'])
+      ->where('slug', $slug)->first();
 
     if(is_null($survey)) {
       return redirect()->back();

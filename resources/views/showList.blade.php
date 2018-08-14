@@ -5,7 +5,7 @@
 <body>
 @include('layouts.partials._nav')
 
-  <div class="container">
+  <div class="container" id="app">
 
     @if(!empty($survey->instructions))
       <div class="panel panel-default">
@@ -45,6 +45,8 @@
         </div>
       </div>
     @endif
+
+    <example survey="{{ $survey }}"></example>
 
     @if(!$tooLate && !$tooEarly)
       <div class="panel panel-default">
@@ -166,6 +168,8 @@
     @endif
   </div>
 
+
+
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -178,6 +182,7 @@
   </script>
 
   <script src="{{ mix('js/participant.js') }}"></script>
+
 </body>
 
 

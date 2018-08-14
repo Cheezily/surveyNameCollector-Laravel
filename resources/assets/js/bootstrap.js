@@ -1,5 +1,5 @@
 
-window._ = require('lodash');
+//window._ = require('lodash');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -51,3 +51,11 @@ if (token) {
 //     broadcaster: 'pusher',
 //     key: 'your-pusher-key'
 // });
+
+window.Vue = require('vue')
+
+Vue.component('example', require('./components/Example.vue'))
+
+const app = new Vue({
+    el: '#app'
+})
