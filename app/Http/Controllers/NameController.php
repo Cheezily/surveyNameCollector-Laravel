@@ -87,6 +87,50 @@ class NameController extends Controller
   }
 
 
+  public function saveNames(Request $request, $slug) {
+
+    $status = 'success';
+    $errors = [];
+
+    $survey = Survey::with(['universities', 'universities.instructors'])
+      ->where('slug', $slug)->first();
+
+    if(empty($request->participant_firstname) 
+      || empty($request->participant_lastname)) {
+      $errors[] = 'yourName';
+    }
+
+    if(empty($request->instructors)) {
+      $errors[] = 'noInstructors';
+    }
+    
+    foreach($request->instructors as $instructor) {
+      if(empty($instructor['course'])) {
+        $errors[] = 'courseWarning';
+        //return response()->json(['errors' => $instructor]);
+      }
+    }
+
+    if($errors) {
+      return response()->json(['errors' => $errors]);
+    }
+/*
+    foreach($request->instructors as $instructor) {
+      $instructor = new Instructor;
+      $instructor->first_name = $instructorFirstName;
+      $instructor->last_name = ucfirst($request->instructorlast);
+      $instructor->survey_id = $survey->id;
+      $instructor->university_id = $university->id;
+      $instructor->student_added = true;
+      $instructor->save();
+    }
+*/
+
+    return response()->json(['status' => 'success']);
+
+  }
+
+
   public function saveAltName(Request $request, $slug) {
 
     Session::flash('maunalPage', true);

@@ -54,7 +54,7 @@ if (token) {
 
 window.Vue = require('vue')
 
-Vue.component('example', require('./components/Example.vue'))
+Vue.component('instructor-list', require('./components/InstructorList.vue'))
 
 const app = new Vue({
     el: '#app'
