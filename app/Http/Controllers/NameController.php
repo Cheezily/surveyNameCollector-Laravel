@@ -109,6 +109,9 @@ class NameController extends Controller
         $errors[] = 'courseWarning';
         //return response()->json(['errors' => $instructor]);
       }
+      if(empty($instructor['university_name'])) {
+        $errors[] = 'universityWarning';
+      }
     }
 
     if($errors) {

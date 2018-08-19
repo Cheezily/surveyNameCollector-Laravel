@@ -7,86 +7,130 @@
                 Please refresh the page and try again. You will not lose your
                 participation credit.
             </p>
+            <p v-if="universityWarning" class="warning">
+                Please make sure all instructors have their univeristy listed
+            </p>
         </div>
 
-        <transition name="fade">
-            <div v-if="!finished" class="panel-body">
+        <transition name="finished" mode="out-in">
+            <div v-if="!finished" v-bind:key="finished" class="panel-body">
                 <form id='mainForm' class="form-group mainForm" @submit.prevent="submitNames()">
 
-                    <div v-if="mainList" class="row">
-                        <div class="col-sm-12">
-                            <label>
-                                Select Your Instructor's Name From The List...
-                                <span class="warning" v-if="noInstructorWarning">
-                                    Please add an Instructor and Course Info
-                                </span>
-                            </label>
+                    <transition name="fade" mode="out-in">
+                        <div v-if="mainList" v-bind:key="mainList" class="row">
+                            <div class="col-sm-12">
+                                <label>
+                                    Select Your Instructor's Name From The List...
+                                    <span class="warning" v-if="noInstructorWarning">
+                                        Please add an Instructor and Course Info
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="col-sm-8 col-xs-12">
+                                <select v-model="selectedInstructor" @change="instructorSelected()"
+                                    class="form-control input-sm">
+                                    <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
+                                    <option DISABLED="true">─────────────────────────</option>
+                                    <template v-for="university in survey_json.universities">
+                                        <option disabled="true">
+                                            {{ university.name.toUpperCase() }}:
+                                        </option>
+                                        <option v-for="instructor in university.instructors" value="4"
+                                            v-bind:key="instructor.id"
+                                            v-bind:value="instructor">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{ instructor.first_name }} {{ instructor.last_name }}
+                                        </option>
+                                        <option DISABLED="true"></option>
+                                    </template>
+                                </select>
+                            </div>
+                            <div class="col-sm-4 col-xs-12 text-right">
+                                <button 
+                                    @click.prevent="openManual()"
+                                    class="btn btn-sm btn-success">
+                                    Click Here if Your Instructor is Not Listed
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="col-sm-8 col-xs-12">
-                            <select v-model="selectedInstructor" @change="instructorSelected()"
-                                id="instructor" class="instructorList form-control input-sm" name="instructor">
-                                <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
-                                <option DISABLED="true">─────────────────────────</option>
-                                <template v-for="university in survey_json.universities">
-                                    <option disabled="true">
-                                        {{ university.name.toUpperCase() }}:
-                                    </option>
-                                    <option v-for="instructor in university.instructors" value="4"
-                                        v-bind:key="instructor.id"
-                                        v-bind:value="instructor">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                        {{ instructor.first_name }} {{ instructor.last_name }}
-                                    </option>
-                                    <option DISABLED="true"></option>
-                                </template>
-                            </select>
-                        </div>
-                        <div class="col-sm-4 col-xs-12 text-right">
-                            <button 
-                                @click.prevent="openManual()"
-                                class="btn btn-sm btn-success">
-                                Click Here if Your Instructor is Not Listed
-                            </button>
-                        </div>
-                    </div>
+                        
+                        <div v-else v-bind:key="mainList" class="form-group">
+                            <p class="warning" v-if="manualWarning">
+                                <strong>{{ manualWarning }}</strong>
+                            </p>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <label>
+                                        Select Your University
+                                    </label>
+                                </div>
+                                <transition name="fade" v-bind:key="universityNotListed">
+                                    <div class="col-md-6" v-if="universityNotListed">
+                                        <label>
+                                            Enter The Name Of Your University
+                                        </label>
+                                    </div>
+                                </transition>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <select v-model="manualUniversitySelected"
+                                        class="instructorList form-control input-sm">
+                                        <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
+                                        <option DISABLED="true">─────────────────────────</option>
+                                        <template v-for="university in universities">
+                                            <option v-bind:value="university">
+                                                {{ university.name }}
+                                            </option>
+                                        </template>
+                                        <option DISABLED="true">─────────────────────────</option>
+                                        <option v-bind:value="-1">UNIVERSITY NOT LISTED</option>
+                                    </select>
+                                </div>
+                                <transition name="fade" v-bind:key="universityNotListed">
+                                    <div class="col-md-6" v-if="universityNotListed">
+                                        <input type="text" class="form-control input-sm"
+                                            v-model="manualUniversityNameOnly"
+                                            placeholder="Enter University Name">
+                                    </div>
+                                </transition>
+                            </div>
 
-                    <div v-else class="form-group">
-                        <label>
-                            ...Or Add Your Instructor and Course Manually
-                            <span class="warning"
-                                v-if="manualWarning">{{ manualWarning }}</span>
-                            </label>
-                            <span class="warning" v-if="noInstructorWarning">
-                                <strong>Please add an Instructor and Course Info</strong>
-                            </span>
-                        <div class="row">
-                            <div class="col-sm-3 col-xs-12">
-                                <input v-model="manualFirstName" 
-                                    class='form-control input-sm' 
-                                    placeholder="Instructor's First Name (Optional)"
-                                    type="text">
-                            </div>
-                            <div class="col-sm-3 col-xs-12">
-                                <input v-model="manualLastName" 
-                                    class='form-control input-sm' 
-                                    placeholder="Instructor's Last Name"
-                                    type="text">
-                            </div>
-                            <div class="col-sm-3 col-xs-12">
-                                <input v-model="manualCourse" 
-                                    class='form-control input-sm'
-                                    placeholder="Enter Course Name"
-                                    type="text">
-                            </div>
-                            <div class="col-sm-3 col-xs-12 text-right">
-                                <button @click.prevent="openManual()"
-                                    class="btn btn-sm btn-warning">Cancel</button>
-                                <button @click.prevent="addManually()"
-                                    class="btn btn-sm btn-success">Add Instructor</button>
+                            <hr>
+
+                            <div class="row">
+                                <div class="col-sm-3 col-xs-12">
+                                    <input v-model="manualFirstName" 
+                                        class='form-control input-sm' 
+                                        placeholder="Instructor's First Name (Optional)"
+                                        type="text">
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <input v-model="manualLastName" 
+                                        class='form-control input-sm' 
+                                        placeholder="Instructor's Last Name"
+                                        type="text">
+                                </div>
+                                <div class="col-sm-3 col-xs-12">
+                                    <input v-model="manualCourse" 
+                                        class='form-control input-sm'
+                                        placeholder="Enter Course Name"
+                                        type="text">
+                                </div>
+                                <div class="col-sm-3 col-xs-12 text-right">
+                                    <button @click.prevent="openManual()"
+                                        class="btn btn-sm btn-warning">
+                                        <span class="glyphicon glyphicon-arrow-left"></span>
+                                        Back
+                                    </button>
+                                    <button @click.prevent="addManually()"
+                                        class="btn btn-sm btn-success">Add Instructor</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </transition>
 
                     <template v-if="selectedInstructors.length > 0">
                         <hr>
@@ -103,7 +147,7 @@
                             <div class="panel-body">
                                 <div class="form-group">
                                     <div class="row instructorListHeading">
-                                        <div class="col-md-5">
+                                        <div class="col-md-7">
                                             <label>Professor Name</label>
                                         </div>
                                         <div class="col-md-5">
@@ -112,20 +156,22 @@
                                     </div>
                                     <div class="row instructorInfo" v-for="(instructor, id) in selectedInstructors" 
                                         v-bind:key="id">
-                                        <div class="col-sm-5 col-xs-12">
+                                        <div class="col-sm-7 col-xs-12">
                                             <p class="selectedName">
                                                 <strong>{{ instructor.first_name }} 
                                                     {{ instructor.last_name }}</strong>
+                                                    -
+                                                <span>{{ instructor.university_name }}</span>
                                             </p>
                                         </div>
-                                        <div class="col-sm-5 col-xs-11">
+                                        <div class="col-sm-4 col-xs-11">
                                             <input type="text" 
                                                 class="form-control input-sm"
                                                 v-model="selectedInstructors[id].course"
                                                 @change="setCourse(id)"
                                                 placeholder="Enter Course Name...">
                                         </div>
-                                        <div class="col-sm-2 col-xs-2">
+                                        <div class="col-sm-1 col-xs-2">
                                             <span @click="removeInstructor(id)"
                                                 class="pull-right deleteInstructor 
                                                 glyphicon glyphicon-remove-circle">
@@ -171,7 +217,7 @@
                 </form>
             </div>
 
-            <div v-else class="panel-body">
+            <div v-else class="panel-body" v-bind:key="finished">
                 <h2>Thanks!</h2>
                 <h4>Your instructor will be notified soon.  You can close this window.</h4>
             </div>
@@ -187,9 +233,12 @@
                 mainList: true,
                 finished: false,
                 survey_json: JSON.parse(this.survey),
+                universities: [],
                 selectedInstructor: 0,
+                manualUniversitySelected: 0,
                 mounted: '',
                 selectedInstructors: [],
+                manualUniversityNameOnly: '',
                 manualFirstName: '',
                 manualLastName: '',
                 manualCourse: '',
@@ -198,31 +247,55 @@
                 yourNameWarning: false,
                 manualWarning: '',
                 courseWarning: false,
+                universityWarning: false,
                 noInstructorWarning: false,
-                submissionError: false
+                submissionError: false,
+                firstManualPage: true,
+                secondManualPage: false
             } 
         },
         mounted() {
             this.mounted = 'true'
+            this.survey_json.universities.forEach(university => {
+                this.universities.push(university)
+            });
             console.log(this.url)
-            console.log(this.survey)
+            console.log(this.universities)
+        },
+        computed: {
+            universityNotListed() {
+                return this.manualUniversitySelected === -1
+            }
         },
         methods: {
             openManual() {
                 this.mainList = !this.mainList
             },
             instructorSelected() {
+                console.log(this.selectedInstructor)
+
                 this.noInstructorWarning = ''
                 let alreadySelected = false
 
-                for(let i = 0; i < this.selectedInstructors.length; i++) {
-                    if (this.selectedInstructor.id === this.selectedInstructors[i].id) {
+                this.selectedInstructors.forEach(instructor => {
+                    if (instructor.id === this.selectedInstructor.id) {
                         alreadySelected = true
                     }
-                }
+                })
+
+                let university_name = ''
+                let university_id = 0
+                this.survey_json['universities'].forEach(university => {
+                    if (university.id === this.selectedInstructor.university_id) {
+                        university_name = university.name
+                        university_id = university.id
+                    }
+                })
 
                 const instructor = this.selectedInstructor
                 instructor.course = ''
+                instructor.university_name = university_name
+                instructor.university_id = university_id
 
                 if (!alreadySelected) {
                     this.selectedInstructors.push(instructor)
@@ -240,7 +313,7 @@
                 this.manualWarning = ''
                 this.noInstructorWarning = false
                 this.yourNameWarning = false
-                const instructor = []
+                let instructor = {}
                 instructor.id = this.selectedInstructors.length
                 instructor.first_name = this.manualFirstName
 
@@ -252,13 +325,29 @@
                     this.manualWarning = 'Instructor Last Name Required'
                 }
 
+                if ((this.manualUniversitySelected === 0 ||
+                    this.manualUniversitySelected === -1)
+                    && !this.manualUniversityNameOnly) {
+                    this.manualWarning = 'University Info Required'
+                }
+
                 if (!this.manualWarning) {
                     instructor.last_name = this.manualLastName
                     instructor.course = this.manualCourse
+                    if (this.manualUniversityNameOnly.trim()) {
+                        instructor.university_id = 0
+                        instructor.university_name = this.manualUniversityNameOnly.trim()
+                    }
+                    if (this.manualUniversitySelected !== 0 && this.manualUniversitySelected !== -1) {
+                        instructor.university_name = this.manualUniversitySelected.name
+                        instructor.university_id = this.manualUniversitySelected.id
+                    }
                     this.selectedInstructors.push(instructor)
                     this.manualFirstName = ''
                     this.manualLastName = ''
                     this.manualCourse = ''
+                    this.manualUniversityNameOnly = ''
+                    this.manualUniversitySelected = 0
                 }
             },
             submitNames() {
@@ -279,10 +368,10 @@
                     })
                     .then(res => {
                         console.log(res)
-                        if (res['status'] === 'success') {
+                        if (res.data.status === 'success') {
                             this.finished = true
                         } else {
-                            if (res['data'].errors) {
+                            if (res.data.errors) {
                                 for (let i = 0; i < res['data'].errors.length; i++) {
                                     if (res['data'].errors[i] === 'yourName') {
                                         this.yourNameWarning = true
@@ -292,6 +381,9 @@
                                     }
                                     if (res['data'].errors[i] === 'courseWarning') {
                                         this.courseWarning = true
+                                    }
+                                    if (res['data'].errors[i] === 'univeristyWarning') {
+                                        this.universityWarning = true
                                     }
                                 }
                             }
@@ -338,9 +430,23 @@
         color: red;
     }
     .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity .2s;
     }
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+    }
+    .finished-enter-active {
+        transition: all .4s ease-out;
+    }
+    .finished-leave-active {
+        transition: all .4s ease-in;
+    }
+    .finished-enter {
+        transform: skew(90deg, 0);
+        opacity: 0;
+    }
+    .finished-leave-to {
+        transform: skew(-90deg, 0);
+        opacity: 0;
     }
 </style>
