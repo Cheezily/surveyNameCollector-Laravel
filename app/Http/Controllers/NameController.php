@@ -129,7 +129,7 @@ class NameController extends Controller
     }
 */
 
-    return response()->json(['status' => 'success']);
+    return response()->json(['status' => $request->instructors]);
 
   }
 

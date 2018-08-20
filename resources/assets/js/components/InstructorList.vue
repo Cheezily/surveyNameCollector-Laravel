@@ -314,7 +314,7 @@
                 this.noInstructorWarning = false
                 this.yourNameWarning = false
                 let instructor = {}
-                instructor.id = this.selectedInstructors.length
+                instructor.student_added = 1
                 instructor.first_name = this.manualFirstName
 
                 if (!this.manualCourse) {
@@ -334,14 +334,17 @@
                 if (!this.manualWarning) {
                     instructor.last_name = this.manualLastName
                     instructor.course = this.manualCourse
+                    instructor.id = -1
+                    instructor.survey_id = this.survey_json.id
                     if (this.manualUniversityNameOnly.trim()) {
-                        instructor.university_id = 0
+                        instructor['university_id'] = -1
                         instructor.university_name = this.manualUniversityNameOnly.trim()
                     }
                     if (this.manualUniversitySelected !== 0 && this.manualUniversitySelected !== -1) {
                         instructor.university_name = this.manualUniversitySelected.name
                         instructor.university_id = this.manualUniversitySelected.id
                     }
+                    console.log(instructor)
                     this.selectedInstructors.push(instructor)
                     this.manualFirstName = ''
                     this.manualLastName = ''
