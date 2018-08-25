@@ -95,6 +95,10 @@ class NameController extends Controller
     $survey = Survey::with(['universities', 'universities.instructors'])
       ->where('slug', $slug)->first();
 
+    if (empty($survey)) {
+      return response()->json(['status' => 'error']);
+    }
+
     if(empty($request->participant_firstname) 
       || empty($request->participant_lastname)) {
       $errors[] = 'yourName';
@@ -117,8 +121,27 @@ class NameController extends Controller
     if($errors) {
       return response()->json(['errors' => $errors]);
     }
-/*
+
     foreach($request->instructors as $instructor) {
+      if ($instructor->student_added === 1) {
+        if ($instructor->university_id === 0) {
+          $university = new University;
+          $university->name = ucfirst(trim($instructor->university_name));
+          $university->student_added = 1;
+          $university->survey_id = $survey->id;
+          $university->save();
+        } else {
+          $university = University::find($instructor->university_id);
+          if (empty($university)) {
+            return response()->json(['errors' => ['universityWarning']]);
+          }
+        }
+
+        $new_instructor = new Instructor;
+        $new_instructor->university_id = $university->id;
+        $new_instructor->survey_id = $survey->id;
+      }
+
       $instructor = new Instructor;
       $instructor->first_name = $instructorFirstName;
       $instructor->last_name = ucfirst($request->instructorlast);
@@ -127,7 +150,6 @@ class NameController extends Controller
       $instructor->student_added = true;
       $instructor->save();
     }
-*/
 
     return response()->json(['status' => $request->instructors]);
 
