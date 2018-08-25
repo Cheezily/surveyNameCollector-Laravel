@@ -164,7 +164,7 @@
                               <span class="label label-info instructorRespondentCount">Added By Student</span>
                             @endif
                             {{ $instructor->first_name }} {{ $instructor->last_name }}
-                            @if ($instructor->email) {
+                            @if ($instructor->email)
                               - {{ $instructor->email }}
                             @endif
                           </div>

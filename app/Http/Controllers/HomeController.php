@@ -28,7 +28,7 @@ class HomeController extends Controller
     {
         $surveys = Survey::where('user_id', Auth::user()->id)
             ->orderBy('created_at', 'DESC')->get();
-
+            //dd($surveys);
         return view('home',
             [
                 'surveys' => $surveys,

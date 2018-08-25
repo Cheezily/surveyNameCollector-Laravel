@@ -16,10 +16,18 @@ class Survey extends Model
     }
 
     public function instructors() {
-      return $this->hasMany(Instructor::class);
+      return $this->hasManyThrough(Instructor::class, University::class);
     }
 
     public function participants() {
-      return $this->hasManyThrough(Participant::class, Instructor::class);
+      $participants = [];
+      $instructors = $this->instructors();
+
+      foreach($instructors as $instructor) {
+        $participants[] = $instructor->participants;
+      }
+      
+      return $participants;
+      //return $this->hasManyThrough(Participant::class, Instructor::class);
     }
 }

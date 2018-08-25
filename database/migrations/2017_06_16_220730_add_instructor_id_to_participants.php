@@ -16,6 +16,12 @@ class AddInstructorIdToParticipants extends Migration
         Schema::table('participants', function (Blueprint $table) {
           $table->integer('instructor_id')->unsigned();
         });
+
+        Schema::table('participants', function (Blueprint $table) {
+            $table->foreign('instructor_id')
+            ->references('id')->on('instructors')
+            ->onDelete('cascade');
+        });
     }
 
     /**

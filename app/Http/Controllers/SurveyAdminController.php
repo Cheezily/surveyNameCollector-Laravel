@@ -163,7 +163,6 @@ class SurveyAdminController extends Controller
       $instructor->last_name = ucwords($request->last_name);
       $instructor->email = $request->email;
       $instructor->university_id = $request->university_id;
-      $instructor->survey_id = $survey_id;
       $instructor->save();
       return redirect()->back();
     }
@@ -179,7 +178,9 @@ class SurveyAdminController extends Controller
       }
 
       $instructor = Instructor::where('id', $request->instructor_id)
-          ->where('survey_id', $survey->id)->first();
+          ->whereHas('universities', function ($query) {
+            $query->where('survey_id', $survey->id);
+          })->first();
 
       if(is_null($instructor)) {
         return redirect()->back();

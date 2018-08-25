@@ -18,7 +18,9 @@ class NameController extends Controller
     $survey = Survey::with(['universities', 'universities.instructors'])
       ->where('slug', $slug)->first();
 
-    //dd($survey);
+    if(is_null($survey)) {
+      return view('invalidLink');
+    }
 
     $surveyStart = date(strtotime($survey->start));
     $surveyEnd = date(strtotime($survey->end));
@@ -44,7 +46,7 @@ class NameController extends Controller
     ]);
   }
 
-
+/*
   public function saveName(Request $request, $slug) {
 
     $survey = Survey::with(['universities', 'universities.instructors'])
@@ -86,7 +88,7 @@ class NameController extends Controller
     return redirect()->back();
   }
 
-
+*/
   public function saveNames(Request $request, $slug) {
 
     $status = 'success';
@@ -111,7 +113,6 @@ class NameController extends Controller
     foreach($request->instructors as $instructor) {
       if(empty($instructor['course'])) {
         $errors[] = 'courseWarning';
-        //return response()->json(['errors' => $instructor]);
       }
       if(empty($instructor['university_name'])) {
         $errors[] = 'universityWarning';
@@ -121,6 +122,8 @@ class NameController extends Controller
     if($errors) {
       return response()->json(['errors' => $errors]);
     }
+
+    return response()->json(['status' => $request->instructors]);
 
     foreach($request->instructors as $instructor) {
       if ($instructor->student_added === 1) {
@@ -155,7 +158,7 @@ class NameController extends Controller
 
   }
 
-
+/*
   public function saveAltName(Request $request, $slug) {
 
     Session::flash('maunalPage', true);
@@ -263,4 +266,5 @@ class NameController extends Controller
     Session::flash('manualStudentError', 'There was an error recording your name. Please try again.');
     return redirect()->back();
   }
+  */
 }
