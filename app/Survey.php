@@ -21,13 +21,18 @@ class Survey extends Model
 
     public function participants() {
       $participants = [];
-      $instructors = $this->instructors();
 
-      foreach($instructors as $instructor) {
-        $participants[] = $instructor->participants;
-      }
+      $universities = University::with(['instructors', 'instructors.participants'])
+        ->where('survey_id', $this->id)->get();
       
+      foreach($universities as $university) {
+        foreach($university->instructors as $instructor) {
+          foreach($instructor->participants as $participant) {
+            $participants[] = $participant;
+          }
+        } 
+      }
+
       return $participants;
-      //return $this->hasManyThrough(Participant::class, Instructor::class);
     }
 }

@@ -1,14 +1,17 @@
 <template>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="section-head">Survey Extra Credit</h3>
+            <h3 class="section-head">
+                Survey Extra Credit
+                - {{ selectedInstructors.length }} Instructors Added
+            </h3>
             <p v-if="submissionError" class="warning">
                 There was an error on the server processing the request. 
                 Please refresh the page and try again. You will not lose your
                 participation credit.
             </p>
             <p v-if="universityWarning" class="warning">
-                Please make sure all instructors have their univeristy listed
+                Please make sure all instructors have their univeristy listed.
             </p>
         </div>
 
@@ -32,8 +35,7 @@
                                     class="form-control input-sm">
                                     <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
                                     <option DISABLED="true">─────────────────────────</option>
-                                    <template >
-                                        <div v-for="university in survey_json.universities" :key="university.id">
+                                    <template v-for="university in survey_json.universities">
                                             <option disabled="true">
                                                 {{ university.name.toUpperCase() }}:
                                             </option>
@@ -44,7 +46,6 @@
                                                 {{ instructor.first_name }} {{ instructor.last_name }}
                                             </option>
                                             <option DISABLED="true"></option>
-                                        </div>
                                     </template>
                                 </select>
                             </div>
@@ -102,7 +103,7 @@
                             </div>
 
                             <hr>
-
+                            
                             <div class="row">
                                 <div class="col-sm-3 col-xs-12">
                                     <input v-model="manualFirstName" 
@@ -123,13 +124,13 @@
                                         type="text">
                                 </div>
                                 <div class="col-sm-3 col-xs-12 text-right">
+                                    <button @click.prevent="addManually()"
+                                        class="btn btn-sm btn-success pull-right">Add Instructor</button>
                                     <button @click.prevent="openManual()"
-                                        class="btn btn-sm btn-warning">
+                                        class="btn btn-sm btn-warning back_button">
                                         <span class="glyphicon glyphicon-arrow-left"></span>
                                         Back
                                     </button>
-                                    <button @click.prevent="addManually()"
-                                        class="btn btn-sm btn-success">Add Instructor</button>
                                 </div>
                             </div>
                         </div>
@@ -149,12 +150,9 @@
                             </div>
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <div class="row instructorListHeading">
-                                        <div class="col-md-7">
-                                            <label>Professor Name</label>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <label>Course You're getting Extra Credit In</label>
+                                    <div class="row">
+                                        <div class="col-xs-12 text-center">
+                                            <label>What's the Course Name?</label>
                                         </div>
                                     </div>
                                     <div class="row instructorInfo" v-for="(instructor, id) in selectedInstructors" 
@@ -167,14 +165,14 @@
                                                 <span>{{ instructor.university_name }}</span>
                                             </p>
                                         </div>
-                                        <div class="col-sm-4 col-xs-11">
+                                        <div class="col-sm-4 col-xs-10">
                                             <input type="text" 
-                                                class="form-control input-sm"
+                                                class="form-control input-sm courseName"
                                                 v-model="selectedInstructors[id].course"
                                                 @change="setCourse(id)"
                                                 placeholder="Enter Course Name...">
                                         </div>
-                                        <div class="col-sm-1 col-xs-2">
+                                        <div class="col-sm-1 col-xs-1 pull-right">
                                             <span @click="removeInstructor(id)"
                                                 class="pull-right deleteInstructor 
                                                 glyphicon glyphicon-remove-circle">
@@ -213,7 +211,11 @@
                                     type="text">
                             </div>
                             <div class="col-sm-2 col-xs-12 text-right">
-                                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
+                                <button type="submit" 
+                                    v-if="selectedInstructors.length > 0"
+                                    class="btn btn-sm btn-primary">
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -262,8 +264,7 @@
             this.survey_json.universities.forEach(university => {
                 this.universities.push(university)
             });
-            console.log(this.url)
-            console.log(this.universities)
+            console.log(this.selectedInstructors.length)
         },
         computed: {
             universityNotListed() {
@@ -373,25 +374,36 @@
                         'participant_lastname': this.yourLastName,
                     })
                     .then(res => {
-                        console.log(res)
+                        console.log(res['data'])
+                        console.log(res['data']['errors'])
                         if (res.data.status === 'success') {
                             this.finished = true
+                            this.manualWarning = ''
+                            this.courseWarning = ''
+                            this.noInstructorWarning = ''
+                            this.courseWarning = false
+                            this.yourNameWarning = false
+                            this.submissionError = false
                         } else {
-                            if (res.data.errors) {
-                                for (let i = 0; i < res['data'].errors.length; i++) {
-                                    if (res['data'].errors[i] === 'yourName') {
+                            if (res['data']['errors']) {
+                                res['data']['errors'].forEach(error => {
+                                    if (error === 'yourName') {
                                         this.yourNameWarning = true
+                                        console.log('participant name warning tripped')
                                     }
-                                    if (res['data'].errors[i] === 'noInstructors') {
+                                    if (error === 'noInstructors') {
                                         this.noInstructorWarning = true
+                                        console.log('"no instructors" warning tripped')
                                     }
-                                    if (res['data'].errors[i] === 'courseWarning') {
+                                    if (error === 'courseWarning') {
                                         this.courseWarning = true
+                                        console.log('course warning tripped')
                                     }
-                                    if (res['data'].errors[i] === 'univeristyWarning') {
+                                    if (error === 'universityWarning') {
                                         this.universityWarning = true
+                                        console.log('university warning tripped')
                                     }
-                                }
+                                })
                             }
                         }
                     })
@@ -406,16 +418,21 @@
 
 <style scoped>
     .selectedName {
-        margin-top: 3px;
+        margin-top: 5px;
         margin-bottom: -5px;
     }
-    .instructorListHeading {
-        margin: -8px auto;
+    @media only screen and (max-width: 600px) {
+        .selectedName {
+            margin-bottom: 5px;
+        }
+        input, button {
+            margin-top: 3px;
+        }
     }
     .instructorInfo {
         background: rgba(245,245,245,1);
         border: 1px solid #ccc;
-        padding: 3px 0;
+        padding: 5px 0;
         margin: 4px auto;
         border-radius: 5px;
         box-shadow: 1px 2px #ccc;
@@ -454,5 +471,11 @@
     .finished-leave-to {
         transform: skew(-90deg, 0);
         opacity: 0;
+    }
+    .back_button {
+        margin-right: 3px;
+    }
+    .courseName {
+        margin-top: 0;
     }
 </style>

@@ -177,9 +177,11 @@ class SurveyAdminController extends Controller
         return redirect()->back();
       }
 
+      $survey_id = $survey->id;
+
       $instructor = Instructor::where('id', $request->instructor_id)
-          ->whereHas('universities', function ($query) {
-            $query->where('survey_id', $survey->id);
+          ->whereHas('university', function ($query) use ($survey_id) {
+            $query->where('survey_id', $survey_id);
           })->first();
 
       if(is_null($instructor)) {

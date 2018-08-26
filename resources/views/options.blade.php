@@ -85,7 +85,7 @@
               <form method="post" action="addinstructions">
                 <textarea name="instructions" rows="7" style="width: 100%;">{{ trim($survey->instructions) }}</textarea>
                 {{ csrf_field() }}
-                <input class='btn btn-sm btn-primary' type="submit" value="Submit">
+                <input class='btn btn-sm btn-primary pull-right' type="submit" value="Submit">
               </form>
             </div>
           </div>
@@ -95,7 +95,20 @@
       <div class="col-md-7">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="section-head">Other Instructors Offering Extra Credit</h4>
+            <div class="row">
+              <div class="col-sm-8">
+                <h4 class="section-head">Instructors Offering Extra Credit
+                  <span class="participant_count">
+                    - {{ count($survey->participants()) }} Participant Names Collected
+                  </span>
+                </h4>
+              </div>
+              <div class="col-sm-4">
+                <a class="btn btn-success pull-right" href="{{ url('/', ['admin', $survey->id, 'download']) }}">
+                  Download Participant Names
+                </a>
+              </div>
+            </div>
           </div>
           <div class="panel-body">
             <div class="panel-heading">
