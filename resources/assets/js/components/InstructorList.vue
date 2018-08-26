@@ -32,17 +32,19 @@
                                     class="form-control input-sm">
                                     <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
                                     <option DISABLED="true">─────────────────────────</option>
-                                    <template v-for="university in survey_json.universities">
-                                        <option disabled="true">
-                                            {{ university.name.toUpperCase() }}:
-                                        </option>
-                                        <option v-for="instructor in university.instructors" value="4"
-                                            v-bind:key="instructor.id"
-                                            v-bind:value="instructor">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ instructor.first_name }} {{ instructor.last_name }}
-                                        </option>
-                                        <option DISABLED="true"></option>
+                                    <template >
+                                        <div v-for="university in survey_json.universities" :key="university.id">
+                                            <option disabled="true">
+                                                {{ university.name.toUpperCase() }}:
+                                            </option>
+                                            <option v-for="instructor in university.instructors"
+                                                v-bind:key="instructor.id"
+                                                v-bind:value="instructor">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{ instructor.first_name }} {{ instructor.last_name }}
+                                            </option>
+                                            <option DISABLED="true"></option>
+                                        </div>
                                     </template>
                                 </select>
                             </div>
@@ -80,8 +82,9 @@
                                         class="instructorList form-control input-sm">
                                         <option v-bind:value="0" disabled="true">Select Your University Affiliation</option>
                                         <option DISABLED="true">─────────────────────────</option>
-                                        <template v-for="university in universities">
-                                            <option v-bind:value="university">
+                                        <template>
+                                            <option v-for="university in universities" 
+                                                v-bind:key="university.id" v-bind:value="university">
                                                 {{ university.name }}
                                             </option>
                                         </template>
@@ -451,5 +454,8 @@
     .finished-leave-to {
         transform: skew(-90deg, 0);
         opacity: 0;
+    }
+    .university_name {
+        color: red;
     }
 </style>
