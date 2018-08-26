@@ -95,7 +95,7 @@ class NameController extends Controller
         }
         
         //Participant provided a new university
-        if (is_null($university) || $selected_instructor['university_id'] < 0) {
+        if (empty($university) || $selected_instructor['university_id'] < 0) {
           $university = new University;
           $university->name = ucfirst(trim($selected_instructor['university_name']));
           $university->student_added = 1;
