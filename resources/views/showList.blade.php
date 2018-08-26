@@ -46,9 +46,11 @@
       </div>
     @endif
 
-    <instructor-list 
-      url="{{ Request::fullUrl() }}"
-      survey="{{ $survey }}"></instructor-list>
+    @if(!$tooEarly && !$tooLate)
+      <instructor-list 
+        url="{{ Request::fullUrl() }}"
+        survey="{{ $survey }}"></instructor-list>
+    @endif
 
   </div>
 
