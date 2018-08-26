@@ -455,7 +455,4 @@
         transform: skew(-90deg, 0);
         opacity: 0;
     }
-    .university_name {
-        color: red;
-    }
 </style>
