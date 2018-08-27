@@ -1,4 +1,5 @@
 <template>
+<div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="section-head">
@@ -14,11 +15,12 @@
                 Please make sure all instructors have their univeristy listed.
             </p>
         </div>
+    </div>
 
-        <transition name="finished" mode="out-in">
-            <div v-if="!finished" v-bind:key="finished" class="panel-body">
+    <transition name="replace" mode="in-out" v-bind:key="finished">
+        <div v-if="instructorPanelOpen || selectedInstructors.length === 0" v-bind:key="finished" class='panel panel-default'>
+            <div class="panel-body">
                 <form id='mainForm' class="form-group mainForm" @submit.prevent="submitNames()">
-
                     <transition name="fade" mode="out-in">
                         <div v-if="mainList" v-bind:key="mainList" class="row">
                             <div class="col-sm-12">
@@ -58,7 +60,6 @@
                             </div>
                         </div>
 
-                        
                         <div v-else v-bind:key="mainList" class="form-group">
                             <p class="warning" v-if="manualWarning">
                                 <strong>{{ manualWarning }}</strong>
@@ -120,6 +121,7 @@
                                 <div class="col-sm-3 col-xs-12">
                                     <input v-model="manualCourse" 
                                         class='form-control input-sm'
+                                        @change="checkToOpenNamePanel()"
                                         placeholder="Enter Course Name"
                                         type="text">
                                 </div>
@@ -135,99 +137,133 @@
                             </div>
                         </div>
                     </transition>
+                </form>
+            </div>
+        </div>
+    </transition>
 
-                    <template v-if="selectedInstructors.length > 0">
-                        <hr>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <div class="section-head">
+    <transition name="replace" mode="in-out">
+        <template v-if="selectedInstructors.length > 0 && !finished">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="section-head">
+                            <div class='row'>
+                                <div class='col-xs-12 col-sm-3'>
                                     Instructor(s) Added:
                                     <span class="warning" v-if="courseWarning">
                                         Please make sure to include the course name
                                         for all instructors
                                     </span>
                                 </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-xs-12 text-center">
-                                            <label>What's the Course Name?</label>
-                                        </div>
-                                    </div>
-                                    <div class="row instructorInfo" v-for="(instructor, id) in selectedInstructors" 
-                                        v-bind:key="id">
-                                        <div class="col-sm-7 col-xs-12">
-                                            <p class="selectedName">
-                                                <strong>{{ instructor.first_name }} 
-                                                    {{ instructor.last_name }}</strong>
-                                                    -
-                                                <span>{{ instructor.university_name }}</span>
-                                            </p>
-                                        </div>
-                                        <div class="col-sm-4 col-xs-10">
-                                            <input type="text" 
-                                                class="form-control input-sm courseName"
-                                                v-model="selectedInstructors[id].course"
-                                                @change="setCourse(id)"
-                                                placeholder="Enter Course Name...">
-                                        </div>
-                                        <div class="col-sm-1 col-xs-1 pull-right">
-                                            <span @click="removeInstructor(id)"
-                                                class="pull-right deleteInstructor 
-                                                glyphicon glyphicon-remove-circle">
-                                            </span>
-                                        </div>
-                                    </div>
+                                <div class="col-xs-12 col-sm-9 text-right">
+                                    <button @click="closeInstructorPanel = !closeInstructorPanel"
+                                        class="btn btn-sm btn-info"
+                                    >
+                                        Click Here To Add More Instructors
+                                    </button>
+                                    <button v-if="selectedInstructors.length > 0 && !closeInstructorPanel"
+                                        @click.prevent="closeInstructorPanel = !closeInstructorPanel"
+                                        class="btn btn-sm btn-warning">
+                                        Click Here if You Are Done Adding Instructors
+                                    </button>
                                 </div>
                             </div>
                         </div>
-                    </template>
-
-                    <hr>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <label for="studentfirst">
-                                    Enter Your Name
-                                    <span v-if="yourNameWarning" class="warning">
-                                        Please Enter Your First And Last name
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <label>What's the Course Name?</label>
+                                </div>
+                            </div>
+                            <div class="row instructorInfo" v-for="(instructor, id) in selectedInstructors" 
+                                v-bind:key="id">
+                                <div class="col-sm-7 col-xs-12">
+                                    <p class="selectedName">
+                                        <strong>{{ instructor.first_name }} 
+                                            {{ instructor.last_name }}</strong>
+                                            -
+                                        <span>{{ instructor.university_name }}</span>
+                                        <transition name="fade" mode="out-in">
+                                            <span 
+                                                v-if="(instructor.course.length < 1)"
+                                                class="warning pull-right">
+                                                (Needs Course Info)
+                                            </span>
+                                        </transition>
+                                    </p>
+                                </div>
+                                <div class="col-sm-4 col-xs-10">
+                                    <input type="text" 
+                                        class="form-control input-sm courseName"
+                                        v-model="selectedInstructors[id].course"
+                                        @keyup="checkToOpenNamePanel(id)"
+                                        placeholder="Enter Course Name...">
+                                </div>
+                                <div class="col-sm-1 col-xs-1 pull-right">
+                                    <span @click="removeInstructor(id)"
+                                        class="pull-right deleteInstructor 
+                                        glyphicon glyphicon-remove-circle">
                                     </span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-5 col-xs-12">
-                                <input class='form-control input-sm' 
-                                    placeholder="Your First Name"
-                                    v-model="yourFirstName"
-                                    type="text">
-                            </div>
-                            <div class="col-sm-5 col-xs-12">
-                                <input class='form-control input-sm' 
-                                    placeholder="Your Last Name"
-                                    v-model="yourLastName"
-                                    type="text">
-                            </div>
-                            <div class="col-sm-2 col-xs-12 text-right">
-                                <button type="submit" 
-                                    v-if="selectedInstructors.length > 0"
-                                    class="btn btn-sm btn-primary">
-                                    Submit
-                                </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+        </template>
+    </transition>
 
-            <div v-else class="panel-body" v-bind:key="finished">
-                <h2>Thanks!</h2>
-                <h4>Your instructor will be notified soon.  You can close this window.</h4>
+    <transition name="replace" mode="in-out">
+        <div v-if="openNamePanel && !finished && selectedInstructors.length > 0"        
+            class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label for="studentfirst">
+                                Enter Your Name
+                                <span v-if="yourNameWarning" class="warning">
+                                    Please Enter Your First And Last name
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <input class='form-control input-sm' 
+                                placeholder="Your First Name"
+                                v-model="yourFirstName"
+                                type="text">
+                        </div>
+                        <div class="col-sm-5 col-xs-12">
+                            <input class='form-control input-sm' 
+                                placeholder="Your Last Name"
+                                v-model="yourLastName"
+                                type="text">
+                        </div>
+                        <div class="col-sm-2 col-xs-12 text-right">
+                            <button type="submit"
+                                @click="submitNames()"
+                                v-if="selectedInstructors.length > 0"
+                                class="btn btn-sm btn-primary">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </transition>
-    </div>
+        </div>
+    </transition>
+
+    <transition name="replace" mode="in-out">
+        <div v-if="finished" class="panel-body" v-bind:key="finished">
+            <h2>Thanks!</h2>
+            <h4>Your instructor will be notified soon.  You can close this window.</h4>
+        </div>
+    </transition>
+
+</div>
 </template>
 
 <script>
@@ -256,7 +292,9 @@
                 noInstructorWarning: false,
                 submissionError: false,
                 firstManualPage: true,
-                secondManualPage: false
+                secondManualPage: false,
+                closeInstructorPanel: false,
+                openNamePanel: false
             } 
         },
         mounted() {
@@ -264,16 +302,48 @@
             this.survey_json.universities.forEach(university => {
                 this.universities.push(university)
             });
-            console.log(this.selectedInstructors.length)
         },
         computed: {
             universityNotListed() {
                 return this.manualUniversitySelected === -1
+            },
+            instructorPanelOpen() {
+                return (this.selectedInstructors.length < 0) || !this.closeInstructorPanel
+            }
+        },
+        watch: {
+            selectedInstructors() {
+                let allHaveCourses = true
+                this.selectedInstructors.forEach(function (instructor) {
+                    if (instructor.course.length < 1) {
+                        allHaveCourses = false
+                    }
+                })
+                
+                if (allHaveCourses) {
+                    this.openNamePanel = true
+                } else {
+                    this.openNamePanel = false
+                }
             }
         },
         methods: {
             openManual() {
                 this.mainList = !this.mainList
+            },
+            checkToOpenNamePanel() {
+                let allHaveCourses = true
+                this.selectedInstructors.forEach(function (instructor) {
+                    if (instructor.course.length < 1) {
+                        allHaveCourses = false
+                    }
+                })
+                
+                if (allHaveCourses) {
+                    this.openNamePanel = true
+                } else {
+                    this.openNamePanel = false
+                }
             },
             instructorSelected() {
                 console.log(this.selectedInstructor)
@@ -305,13 +375,10 @@
                     this.selectedInstructors.push(instructor)
                 }
                 this.selectedInstructor = 0
+                this.closeInstructorPanel = true
             },
             removeInstructor(id) {
                 this.selectedInstructors.splice(id,1)
-            },
-            setCourse(id) {
-                console.log(id)
-                console.log(this.selectedInstructors)
             },
             addManually() {
                 this.manualWarning = ''
@@ -348,13 +415,14 @@
                         instructor.university_name = this.manualUniversitySelected.name
                         instructor.university_id = this.manualUniversitySelected.id
                     }
-                    console.log(instructor)
+                    //console.log(instructor)
                     this.selectedInstructors.push(instructor)
                     this.manualFirstName = ''
                     this.manualLastName = ''
                     this.manualCourse = ''
                     this.manualUniversityNameOnly = ''
                     this.manualUniversitySelected = 0
+                    this.closeInstructorPanel = true
                 }
             },
             submitNames() {
@@ -365,7 +433,7 @@
                 this.yourNameWarning = false
                 this.submissionError = false
                 
-                console.log(this.selectedInstructors)
+                //console.log(this.selectedInstructors)
 
                 axios.post(this.url + '/savenames',
                     {
@@ -453,25 +521,23 @@
         color: red;
     }
     .fade-enter-active, .fade-leave-active {
-    transition: opacity .2s;
+        transition: all .2s;
     }
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0;
-    }
-    .finished-enter-active {
-        transition: all .4s ease-out;
-    }
-    .finished-leave-active {
-        transition: all .4s ease-in;
-    }
-    .finished-enter {
-        transform: skew(90deg, 0);
+    .fade-enter, .fade-leave-to {
         opacity: 0;
     }
-    .finished-leave-to {
-        transform: skew(-90deg, 0);
+
+    .replace-enter-active {
+        transition: all .2s;
+        transition-delay: .3s;
+    }
+    .replace-leave-active {
+        transition: all .2s;
+    }
+    .replace-enter, .replace-leave-to {
         opacity: 0;
     }
+
     .back_button {
         margin-right: 3px;
     }
