@@ -35,21 +35,16 @@
       </div>
     @endif
 
+    @if(!empty($survey->instructions))
+      <h4 class="section-head">Special Instructions</h4>
+      <pre>{{ $survey->instructions }}</pre>
+      <hr>
+    @endif
+
     @if(!$tooEarly && !$tooLate)
       <instructor-list 
         url="{{ Request::fullUrl() }}"
         survey="{{ $survey }}"></instructor-list>
-    @endif
-
-    @if(!empty($survey->instructions))
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="section-head">Special Instructions</h4>
-        </div>
-        <div class="panel-body">
-          <pre>{{ $survey->instructions }}</pre>
-        </div>
-      </div>
     @endif
 
   </div>

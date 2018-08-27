@@ -1,8 +1,8 @@
 <template>
 <div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="section-head">
+    <transition name="replace" mode="in-out" v-bind:key="finished">
+        <div v-if="!finished">
+            <h3 class='section-head'>
                 Survey Extra Credit
                 - {{ selectedInstructors.length }} Instructors Added
             </h3>
@@ -15,12 +15,12 @@
                 Please make sure all instructors have their univeristy listed.
             </p>
         </div>
-    </div>
+    </transition>
 
     <transition name="replace" mode="in-out" v-bind:key="finished">
         <div v-if="instructorPanelOpen || selectedInstructors.length === 0" v-bind:key="finished" class='panel panel-default'>
             <div class="panel-body">
-                <form id='mainForm' class="form-group mainForm" @submit.prevent="submitNames()">
+                <div class="form-group">
                     <transition name="fade" mode="out-in">
                         <div v-if="mainList" v-bind:key="mainList" class="row">
                             <div class="col-sm-12">
@@ -121,7 +121,6 @@
                                 <div class="col-sm-3 col-xs-12">
                                     <input v-model="manualCourse" 
                                         class='form-control input-sm'
-                                        @change="checkToOpenNamePanel()"
                                         placeholder="Enter Course Name"
                                         type="text">
                                 </div>
@@ -137,7 +136,7 @@
                             </div>
                         </div>
                     </transition>
-                </form>
+                </div>
             </div>
         </div>
     </transition>
@@ -156,12 +155,14 @@
                                     </span>
                                 </div>
                                 <div class="col-xs-12 col-sm-9 text-right">
-                                    <button @click="closeInstructorPanel = !closeInstructorPanel"
+                                    <button v-if="!instructorPanelOpen"
+                                        @click="closeInstructorPanel = !closeInstructorPanel"
                                         class="btn btn-sm btn-info"
                                     >
                                         Click Here To Add More Instructors
                                     </button>
-                                    <button v-if="selectedInstructors.length > 0 && !closeInstructorPanel"
+
+                                    <button v-if="instructorPanelOpen || selectedInstructors.length === 0"
                                         @click.prevent="closeInstructorPanel = !closeInstructorPanel"
                                         class="btn btn-sm btn-warning">
                                         Click Here if You Are Done Adding Instructors
@@ -187,7 +188,7 @@
                                         <span>{{ instructor.university_name }}</span>
                                         <transition name="fade" mode="out-in">
                                             <span 
-                                                v-if="(instructor.course.length < 1)"
+                                                v-if="hasCourse.indexOf(instructor.id) === -1"
                                                 class="warning pull-right">
                                                 (Needs Course Info)
                                             </span>
@@ -198,7 +199,7 @@
                                     <input type="text" 
                                         class="form-control input-sm courseName"
                                         v-model="selectedInstructors[id].course"
-                                        @keyup="checkToOpenNamePanel(id)"
+                                        @keyup="checkToOpenNamePanel()"
                                         placeholder="Enter Course Name...">
                                 </div>
                                 <div class="col-sm-1 col-xs-1 pull-right">
@@ -294,7 +295,8 @@
                 firstManualPage: true,
                 secondManualPage: false,
                 closeInstructorPanel: false,
-                openNamePanel: false
+                openNamePanel: false,
+                hasCourse: []
             } 
         },
         mounted() {
@@ -313,10 +315,13 @@
         },
         watch: {
             selectedInstructors() {
+                this.hasCourse = []
                 let allHaveCourses = true
-                this.selectedInstructors.forEach(function (instructor) {
+                this.selectedInstructors.forEach(instructor => {
                     if (instructor.course.length < 1) {
                         allHaveCourses = false
+                    } else {
+                        this.hasCourse.push(instructor.id)
                     }
                 })
                 
@@ -332,10 +337,13 @@
                 this.mainList = !this.mainList
             },
             checkToOpenNamePanel() {
+                this.hasCourse = []
                 let allHaveCourses = true
-                this.selectedInstructors.forEach(function (instructor) {
+                this.selectedInstructors.forEach(instructor => {
                     if (instructor.course.length < 1) {
                         allHaveCourses = false
+                    } else {
+                        this.hasCourse.push(instructor.id)
                     }
                 })
                 
