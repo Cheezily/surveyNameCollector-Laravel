@@ -7,17 +7,6 @@
 
   <div class="container" id="app">
 
-    @if(!empty($survey->instructions))
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h4 class="section-head">Special Instructions</h4>
-        </div>
-        <div class="panel-body">
-          <pre>{{ $survey->instructions }}</pre>
-        </div>
-      </div>
-    @endif
-
     @if($tooEarly)
       <div class="panel panel-default">
         <div class="panel-heading">
@@ -50,6 +39,17 @@
       <instructor-list 
         url="{{ Request::fullUrl() }}"
         survey="{{ $survey }}"></instructor-list>
+    @endif
+
+    @if(!empty($survey->instructions))
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="section-head">Special Instructions</h4>
+        </div>
+        <div class="panel-body">
+          <pre>{{ $survey->instructions }}</pre>
+        </div>
+      </div>
     @endif
 
   </div>
