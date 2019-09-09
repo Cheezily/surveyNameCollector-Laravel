@@ -39,8 +39,8 @@
       <div class="footer">
         <p class="myname">
           &copy;<?php echo(date('Y', strtotime('now'))); ?>
-          <span id="name1">Philip Michaels</span>
-          <span id="name2">Dr. Kerri Milita</span>
+          <span id="name1">AcademyBit</span>
+          {{--  <span id="name2">Dr. Kerri Milita</span>  --}}
         </p>
         <p class="github">
           <a href="https://github.com/Cheezily/surveyNameCollector-Laravel">
@@ -52,10 +52,15 @@
 
   <script type="text/javascript">
     var name1Output = document.getElementById('name1');
+    name1Output.innerHTML = "<a href='mailto:contact@" + "academybit.com?Subject=Question Regarding ExtraCredit.Info'>"
+        + "AcademyBit" + "</a>";
+  </script>
+  {{--  <script type="text/javascript">
+    var name1Output = document.getElementById('name1');
     name1Output.innerHTML = "<a href='mailto:philip." + "michaels@" + "gmail.com?Subject=Question Regarding ExtraCredit.Info'>"
         + "Philip" + " " +  "Michaels" + "</a>";
     var name2Output = document.getElementById('name2');
     name2Output.innerHTML = " & <a href='mailto:kerri" + "milita@" + "gmail.com?Subject=Question Regarding ExtraCredit.Info'>"
         + "Dr. Kerri" + " " +  "Milita" + "</a>";
-  </script>
+  </script>  --}}
 </html>
