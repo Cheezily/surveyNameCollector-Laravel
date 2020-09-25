@@ -30,7 +30,6 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - extracredit_storage:./storage
       - ./:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/
     networks:
