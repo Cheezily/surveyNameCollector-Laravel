@@ -37,4 +37,4 @@ Route::post('/admin/{survey}/addinstructor/', 'SurveyAdminController@addInstruct
 Route::post('/admin/{survey}/deleteinstructor/', 'SurveyAdminController@deleteInstructor');
 Route::post('/admin/{survey}/addinstructions/', 'SurveyAdminController@addInstructions');
 
-
+Route::get('ram_cpu', 'SystemResourceController@total_ram_cpu');
