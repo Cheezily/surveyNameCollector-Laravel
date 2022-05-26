@@ -13,9 +13,6 @@
   <!-- Styles -->
   <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
-  <!-- Jquery -->
-  <script src="{{ asset('js/jquery-3.2.1.slim.min.js') }}" type="text/javascript"></script>
-
   <?php $analytics = App\Option::find(1)->google_analytics_key; ?>
 
   @if(!empty($analytics))

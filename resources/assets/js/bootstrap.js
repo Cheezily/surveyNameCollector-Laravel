@@ -52,9 +52,11 @@ if (token) {
 //     key: 'your-pusher-key'
 // });
 
-window.Vue = require('vue')
+// window.Vue = require('vue')
+import Vue from 'vue'
 
-Vue.component('instructor-list', require('./components/InstructorList.vue'))
+// Vue.component('instructor-list', require('./components/InstructorList.vue'))
+Vue.component('instructor-list', () => import('./components/InstructorList.vue'))
 
 const app = new Vue({
     el: '#app'
