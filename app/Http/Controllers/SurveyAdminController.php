@@ -229,8 +229,24 @@ class SurveyAdminController extends Controller
         exit;
       }
 
-      $out = "Student First Name, Student Last Name, University, ".
-          "Instructor First Name, Instructor Last Name, Instructor Email, Class, Time \n";
+      $fields[] = "Student First Name";
+      $fields[] = "Student Last Name";
+      $fields[] = "University";
+      $fields[] = "Instructor First Name";
+      $fields[] = "Instructor Last Name";
+      $fields[] = "Instructor Email";
+      $fields[] = "Class";
+      $fields[] = "Time";
+      
+      $output = fopen('php://output', 'w');
+
+      header("Content-type: text/csv");
+      header("Content-Disposition: attachment; filename=participants.csv");
+      header("Content-Transfer-Encoding: UTF-8");
+      header("Pragma: no-cache");
+      header("Expires: 0");
+
+      fputcsv($output, $fields);
 
       $results = [];
       $universities = University::where('survey_id', $survey->id)->get();
@@ -252,19 +268,19 @@ class SurveyAdminController extends Controller
       }
 
       forEach($results as $line) {
-        $out .= $line['student_first'].',';
-        $out .= $line['student_last'].',';
-        $out .= $line['university'].',';
-        $out .= $line['instructor_first'].',';
-        $out .= $line['instructor_last'].',';
-        $out .= $line['instructor_email'].',';
-        $out .= $line['class'].',';
-        $out .= date("M j Y g:i:s A", strtotime($line['submitted']))." CST \n";
+        $out = [];
+        $out[] = $line['student_first'];
+        $out[] = $line['student_last'];
+        $out[] = $line['university'];
+        $out[] = $line['instructor_first'];
+        $out[] = $line['instructor_last'];
+        $out[] = $line['instructor_email'];
+        $out[] = $line['class'];
+        $out[] = date("M j Y g:i:s A", strtotime($line['submitted']))." CST \n";
+        fputcsv($output, $out);
       }
-      header("Content-type: application/octet-stream");
-      header("Content-Disposition: attachment; filename=output.csv");
-      header("Pragma: no-cache");
-      header("Expires: 0");
-      print $out;
+
+      fclose($output);
+      die();
     }
 }
