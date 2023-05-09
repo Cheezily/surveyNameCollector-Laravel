@@ -36,7 +36,7 @@
     _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
     (function() {
-      var u="{{ config('matomo_url') }}";
+      var u="//{{ config('matomo_url') }}/";
       _paq.push(['setTrackerUrl', u+'matomo.php']);
       _paq.push(['setSiteId', "{{ config('matomo_site_id') }}"]);
       var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
