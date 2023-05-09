@@ -16,6 +16,8 @@
   <?php $analytics = App\Option::find(1)->google_analytics_key; ?>
 
   @if(!empty($analytics))
+
+  @if(false)
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -24,8 +26,25 @@
 
     ga('create', '{{ $analytics }}', 'auto');
     ga('send', 'pageview');
-
   </script>
+  @endif
+
+  <!-- Matomo -->
+  <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="{{ config('matomo_url') }}";
+      _paq.push(['setTrackerUrl', u+'matomo.php']);
+      _paq.push(['setSiteId', "{{ config('matomo_site_id') }}"]);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+
   @endif
 
 </head>
