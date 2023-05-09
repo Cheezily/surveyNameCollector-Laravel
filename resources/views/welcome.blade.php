@@ -39,7 +39,8 @@
       <div class="footer">
         <p class="myname">
           &copy;<?php echo(date('Y', strtotime('now'))); ?>
-          <span id="name1">AcademyBit</span>
+          {{--  <span id="name1">AcademyBit</span>  --}}
+          <a href="http://academybit.com" target="_blank">AcademyBit</span>
           {{--  <span id="name2">Dr. Kerri Milita</span>  --}}
         </p>
         <p class="github">
